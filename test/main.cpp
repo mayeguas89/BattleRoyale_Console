@@ -37,12 +37,15 @@ struct GameManagerTest: Test
   }
 };
 
-TEST_F(GameManagerTest, PlayRound) 
+TEST_F(GameManagerTest, PlayRound)
 {
   while (gm.IsRunning())
   {
     gm.PlayRound();
   }
+  auto p = gm.GetWinner();
+  ASSERT_TRUE(p);
+  fmt::print("Player {} has win!\n", p->GetName());
 }
 
 TEST(Interface, SelectFromType)

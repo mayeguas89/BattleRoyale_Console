@@ -33,6 +33,8 @@ void GameManager::SelectTurnOrder()
     results.push_back(pair);
   }
 
+  fmt::print("\n** El order de los jugadores **\n");
+
   // Ordena por resultado de dado de mayor a menor,
   // TODO volver a lanzar si se empatan entre jugadores
   std::sort(results.begin(), results.end(), sort_by_result);
@@ -49,7 +51,6 @@ void GameManager::StartGame()
 {
   SelectTurnOrder();
   is_running_ = true;
-  dist_ = std::uniform_int_distribution<std::mt19937::result_type>(1, players_.size() - 1);
 }
 
 void GameManager::AddPlayer(const Player& p)
@@ -61,18 +62,30 @@ void GameManager::AddPlayer(const Player& p)
 
 void GameManager::PlayRound()
 {
+  static int round = 0;
+  fmt::print("\n**Round {}**\n", round);
+  auto dist = std::uniform_int_distribution<std::mt19937::result_type>(0, players_.size() - 1);
+
   for (size_t i = 0; i < players_.size(); i++)
   {
     auto& player = players_.at(i);
     fmt::print("Player {} turn\n", i);
+
     if (player.IsDead())
+    {
+      fmt::print("Player is dead\n");
       continue;
-    auto enemy_index = dist_(rng_);
+    }
+
+    auto enemy_index = dist(rng_);
     fmt::print("Enemy index {}\n", enemy_index);
-    while (enemy_index == i || players_.at(enemy_index).IsDead())
+
+    int count = 0;
+
+    while ((enemy_index == i || players_.at(enemy_index).IsDead()))
     {
       fmt::print("Enemy itself or died\n");
-      enemy_index = dist_(rng_);
+      enemy_index = dist(rng_);
       fmt::print("Enemy index {}\n", enemy_index);
     }
 
@@ -82,15 +95,13 @@ void GameManager::PlayRound()
     {
       case Player::Action::kHeal:
       {
+        fmt::print("Player {} se cura a si mismo\n", i);
         player.Heal();
         break;
       }
       case Player::Action::kAttack:
       {
-        fmt::print("Player {} attacks with power {} to player {}\n",
-                   i,
-                   player.GetAttack(),
-                   enemy.GetName());
+        fmt::print("Player {} attacks with power {} to player {}\n", i, player.GetAttack(), enemy_index);
         enemy.ReceiveDamage(player.GetAttack());
         break;
       }
@@ -101,10 +112,17 @@ void GameManager::PlayRound()
     if (GetPlayersAlive() == 1)
       break;
   }
+
+  fmt::print("\n**Player State**\n");
   PrintPlayers();
+
+  auto remove_player = [](auto player) { return player.IsDead(); };
+  players_.erase(std::remove_if(players_.begin(), players_.end(), remove_player), players_.end());
 
   if (GetPlayersAlive() == 1)
     is_running_ = false;
+    
+  round++;
 }
 
 int GameManager::GetPlayersAlive()
@@ -118,4 +136,14 @@ void GameManager::PrintPlayers()
   {
     fmt::print("{}\n", player);
   }
+}
+
+std::optional<Player> GameManager::GetWinner()
+{
+  auto it = std::find_if(players_.begin(), players_.end(), [](auto& p) { return p.IsDead(); });
+  if (it != players_.end())
+  {
+    return *it;
+  }
+  return std::nullopt;
 }

@@ -3,6 +3,7 @@
 #include "dice.h"
 #include "player.h"
 
+#include <optional>
 #include <random>
 #include <vector>
 
@@ -36,6 +37,7 @@ public:
 
   void AddPlayer(const Player& player);
   void PlayRound();
+  std::optional<Player> GetWinner();
 
 private:
   GameManager(): dice6_{Dice(6)}
@@ -47,10 +49,6 @@ private:
   std::vector<Player> players_;
   bool is_running_ = false;
   Dice dice6_;
-
   std::mt19937 rng_;
-  std::uniform_int_distribution<std::mt19937::result_type> dist_ =
-    std::uniform_int_distribution<std::mt19937::result_type>(1, GameManager::kMaxNumPlayers);
-
   void PrintPlayers();
 };

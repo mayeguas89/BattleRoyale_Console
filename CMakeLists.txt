@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 project(MyProject VERSION 0.1.0)
-
 include(FetchContent)
 
 FetchContent_Declare(googletest
@@ -38,25 +37,30 @@ target_link_libraries(
     fmt::fmt
 )
 
+target_compile_features(ProjectCore PRIVATE cxx_std_17)
+
 add_executable(
     MyProject 
     src/main.cpp
 )
-
+    
 target_link_libraries(
     MyProject 
     PRIVATE
     ProjectCore
 )
+target_compile_features(MyProject PRIVATE cxx_std_17)
+
 
 add_executable(
     MyProjectTest
     test/main.cpp
-)
-
+    )
+    
+target_compile_features(MyProjectTest PRIVATE cxx_std_17)
 target_link_libraries(
     MyProjectTest
-    PRIVATE
+    PUBLIC
     ProjectCore
     gmock
     gmock_main

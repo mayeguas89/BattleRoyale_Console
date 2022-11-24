@@ -1,7 +1,7 @@
 #include "player.h"
 
 const float Player::kDefaultLife = 10.f;
-const float Player::kDefaultAttack = 5.f;
+const float Player::kDefaultAttack = 2.f;
 const float Player::kDefaultHealAmount = 1.f;
 
 Player::Player(Player::Type type, const std::string& name):
@@ -49,7 +49,7 @@ std::string TypeToString(const Player::Weapon& weapon)
   using Weapon = Player::Weapon;
   switch (weapon)
   {
-    case Weapon::kSword :
+    case Weapon::kSword:
       return "Sword";
     case Weapon::kArch:
       return "Arch";

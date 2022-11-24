@@ -1,10 +1,9 @@
 #pragma once
 
-#include "fmt/format.h"
+#include <fmt/format.h>
 
 #include <functional>
 #include <iostream>
-#include <map>
 #include <string>
 
 class Player
@@ -58,7 +57,6 @@ public:
 
   void Heal()
   {
-    fmt::print("Player {} se cura a si mismo\n", name_);
     current_health_ += heal_amount_;
     if (current_health_ > kDefaultLife)
     {
