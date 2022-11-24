@@ -6,12 +6,6 @@
 #include <string>
 #include <utility>
 
-bool GameManager::is_running_ = false;
-std::vector<Player> GameManager::players_ = std::vector<Player>();
-Dice GameManager::dice6_ = Dice(6);
-std::uniform_int_distribution<std::mt19937::result_type> GameManager::dist_ =
-  std::uniform_int_distribution<std::mt19937::result_type>(1, GameManager::kMaxNumPlayers);
-std::mt19937 GameManager::rng_ = std::mt19937();
 using namespace std;
 
 GameManager& GameManager::GetInstance()

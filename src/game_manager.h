@@ -20,36 +20,37 @@ public:
 
   static GameManager& GetInstance();
 
-  static void SelectTurnOrder();
+  void SelectTurnOrder();
 
-  static void StartGame();
+  void StartGame();
 
-  static std::vector<Player>& GetPlayers()
+  std::vector<Player>& GetPlayers()
   {
     return players_;
   }
 
-  static bool IsRunning()
+  bool IsRunning()
   {
     return is_running_;
   }
 
-  static void AddPlayer(const Player& player);
-  static void PlayRound();
+  void AddPlayer(const Player& player);
+  void PlayRound();
 
 private:
-  GameManager()
+  GameManager(): dice6_{Dice(6)}
   {
     std::random_device dev;
     rng_ = std::mt19937(dev());
   }
-  static int GetPlayersAlive();
-  static std::vector<Player> players_;
-  static bool is_running_;
-  static Dice dice6_;
+  int GetPlayersAlive();
+  std::vector<Player> players_;
+  bool is_running_ = false;
+  Dice dice6_;
 
-  static std::mt19937 rng_;
-  static std::uniform_int_distribution<std::mt19937::result_type> dist_;
+  std::mt19937 rng_;
+  std::uniform_int_distribution<std::mt19937::result_type> dist_ =
+    std::uniform_int_distribution<std::mt19937::result_type>(1, GameManager::kMaxNumPlayers);
 
-  static void PrintPlayers();
+  void PrintPlayers();
 };
