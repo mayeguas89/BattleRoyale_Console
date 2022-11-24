@@ -63,7 +63,7 @@ void GameManager::AddPlayer(const Player& p)
 void GameManager::PlayRound()
 {
   static int round = 0;
-  fmt::print("\n**Round {}**\n", round);
+  fmt::print("\n\t**Round {}**\n", round);
   auto dist = std::uniform_int_distribution<std::mt19937::result_type>(0, players_.size() - 1);
 
   for (size_t i = 0; i < players_.size(); i++)
@@ -72,22 +72,12 @@ void GameManager::PlayRound()
     fmt::print("Player {} turn\n", i);
 
     if (player.IsDead())
-    {
-      fmt::print("Player is dead\n");
       continue;
-    }
 
     auto enemy_index = dist(rng_);
-    fmt::print("Enemy index {}\n", enemy_index);
 
-    int count = 0;
-
-    while ((enemy_index == i || players_.at(enemy_index).IsDead()))
-    {
-      fmt::print("Enemy itself or died\n");
+    while (enemy_index == i)
       enemy_index = dist(rng_);
-      fmt::print("Enemy index {}\n", enemy_index);
-    }
 
     auto& enemy = players_.at(enemy_index);
     auto action = player.PlayRound();
@@ -121,7 +111,7 @@ void GameManager::PlayRound()
 
   if (GetPlayersAlive() == 1)
     is_running_ = false;
-    
+
   round++;
 }
 
@@ -138,12 +128,7 @@ void GameManager::PrintPlayers()
   }
 }
 
-std::optional<Player> GameManager::GetWinner()
+Player& GameManager::GetWinner()
 {
-  auto it = std::find_if(players_.begin(), players_.end(), [](auto& p) { return p.IsDead(); });
-  if (it != players_.end())
-  {
-    return *it;
-  }
-  return std::nullopt;
+  return players_.at(0);
 }

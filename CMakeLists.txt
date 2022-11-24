@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.14)
 project(MyProject VERSION 0.1.0)
 include(FetchContent)
 
+FetchContent_Declare(tabulate
+  GIT_REPOSITORY https://github.com/p-ranav/tabulate.git
+  GIT_TAG v1.4
+  GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(tabulate)
+
 FetchContent_Declare(googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
   GIT_TAG v1.12.0

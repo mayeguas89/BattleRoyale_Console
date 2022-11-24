@@ -37,13 +37,6 @@ public:
     kMaxValue
   };
 
-  // std::map<Action, std::function<void()>>
-  //   ActionFunctions = {
-  //     []() { Attack(); },
-  //     []() { Heal(); },
-
-  // }
-
   Player(Type type, const std::string& name = "Empty");
 
   Action PlayRound()
@@ -69,7 +62,7 @@ public:
     return name_;
   }
 
-  bool IsDead()
+  bool IsDead() const
   {
     return current_health_ <= 0.f;
   }

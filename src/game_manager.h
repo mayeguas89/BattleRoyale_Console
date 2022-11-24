@@ -37,7 +37,7 @@ public:
 
   void AddPlayer(const Player& player);
   void PlayRound();
-  std::optional<Player> GetWinner();
+  Player& GetWinner();
 
 private:
   GameManager(): dice6_{Dice(6)}

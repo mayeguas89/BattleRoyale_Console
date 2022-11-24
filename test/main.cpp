@@ -43,9 +43,11 @@ TEST_F(GameManagerTest, PlayRound)
   {
     gm.PlayRound();
   }
-  auto p = gm.GetWinner();
-  ASSERT_TRUE(p);
-  fmt::print("Player {} has win!\n", p->GetName());
+
+  fmt::print("\n** Combat has finished **\n");
+  auto& p = gm.GetWinner();
+
+  fmt::print("Player {} has win!\n", p.GetName());
 }
 
 TEST(Interface, SelectFromType)
