@@ -16,16 +16,26 @@ public:
 
   enum class Type
   {
-    kType1 = 0,
+    kMinValue = 0,
+    kType1,
     kType2,
     kType3,
     kType4,
-    kNumPlayerType
+    kMaxValue
   };
   enum class Action
   {
+    kMinValue = 0,
     kHeal,
-    kAttack
+    kAttack,
+    kMaxValue
+  };
+  enum class Weapon
+  {
+    kMinValue = 0,
+    kSword,
+    kArch,
+    kMaxValue
   };
 
   // std::map<Action, std::function<void()>>
@@ -86,11 +96,6 @@ public:
     current_health_ -= damage;
   }
 
-  static bool CheckPlayerType(int type)
-  {
-    return (int)Type::kType1 <= type && type < (int)Type::kNumPlayerType;
-  }
-
   friend std::ostream& operator<<(std::ostream& os, const Player& p);
 
 private:
@@ -101,13 +106,15 @@ private:
   std::string name_;
 };
 
-std::string PlayerTypeToString(const Player::Type& type);
+std::string TypeToString(const Player::Type& type);
+std::string TypeToString(const Player::Action& action);
+std::string TypeToString(const Player::Weapon& weapon);
 
 inline std::ostream& operator<<(std::ostream& os, const Player& p)
 {
   return os << fmt::format("{{name: {}, type: {}, health: {}, attack: {}}}",
                            p.name_,
-                           PlayerTypeToString(p.type_),
+                           TypeToString(p.type_),
                            p.current_health_,
                            p.attack_);
 }
@@ -127,7 +134,7 @@ struct fmt::formatter<Player>
     return format_to(ctx.out(),
                      "{{name: {}, type: {}, health: {}, attack: {}}}",
                      p.GetName(),
-                     PlayerTypeToString(p.GetType()),
+                     TypeToString(p.GetType()),
                      p.GetHealth(),
                      p.GetAttack());
   }

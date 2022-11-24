@@ -64,13 +64,19 @@ void GameManager::PlayRound()
   for (size_t i = 0; i < players_.size(); i++)
   {
     auto& player = players_.at(i);
+    fmt::print("Player {} turn\n", i);
     if (player.IsDead())
       continue;
     auto enemy_index = dist_(rng_);
+    fmt::print("Enemy index {}\n", enemy_index);
     while (enemy_index == i || players_.at(enemy_index).IsDead())
+    {
+      fmt::print("Enemy itself or died\n");
       enemy_index = dist_(rng_);
-    auto& enemy = players_.at(enemy_index);
+      fmt::print("Enemy index {}\n", enemy_index);
+    }
 
+    auto& enemy = players_.at(enemy_index);
     auto action = player.PlayRound();
     switch (action)
     {
@@ -82,7 +88,7 @@ void GameManager::PlayRound()
       case Player::Action::kAttack:
       {
         fmt::print("Player {} attacks with power {} to player {}\n",
-                   player.GetName(),
+                   i,
                    player.GetAttack(),
                    enemy.GetName());
         enemy.ReceiveDamage(player.GetAttack());

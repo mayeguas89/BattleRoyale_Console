@@ -1,5 +1,6 @@
 #include "dice.h"
 #include "game_manager.h"
+#include "interface.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -42,4 +43,11 @@ TEST_F(GameManagerTest, PlayRound)
   {
     gm.PlayRound();
   }
+}
+
+TEST(Interface, SelectFromType)
+{
+  GameInterface::SelectFromType<Player::Type>();
+  GameInterface::SelectFromType<Player::Action>();
+  GameInterface::SelectFromType<Player::Weapon>();
 }

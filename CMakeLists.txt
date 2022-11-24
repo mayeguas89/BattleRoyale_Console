@@ -9,7 +9,7 @@ FetchContent_Declare(googletest
   GIT_PROGRESS TRUE
   )
 
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
   
 FetchContent_Declare(fmt

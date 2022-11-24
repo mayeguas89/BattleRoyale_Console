@@ -52,33 +52,10 @@ void InitializePlayers(std::istream& in, int number_players)
   for (int n = 0; n < number_players; n++)
   {
     bool go_on = true;
-    int player_type;
     std::string player_name = GetPlayerName(in);
-    while (go_on)
-    {
-      fmt::print("Introduce el tipo de jugador\n", n + 1);
-      cout << "1.Tipo 1\n";
-      cout << "2.Tipo 2\n";
-      cout << "3.Tipo 3\n";
-      cout << "4.Tipo 4\n";
-      getline(in, text);
-      try
-      {
-        player_type = stoi(text);
-        if (Player::CheckPlayerType(player_type))
-          go_on = false;
-        else
-          fmt::print("Error al introducir el tipo de jugador,"
-                     " tiene que ser un numero entre 1 y {}\n",
-                     (int)Player::Type::kNumPlayerType);
-      }
-      catch (const invalid_argument&)
-      {
-        fmt::print("Error conviertiendo {} a un numero entero, intentalo otra vez!\n", text);
-      }
-    }
-
-    auto p = Player{(Player::Type)player_type, player_name};
+    fmt::print("** Seleccion de personaje **\n");
+    auto player_type = SelectFromType<Player::Type>();
+    auto p = Player{player_type, player_name};
     gm.AddPlayer(p);
     fmt::print("Player {} se une al juego...\n", p);
   }
