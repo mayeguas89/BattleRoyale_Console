@@ -47,6 +47,11 @@ void GameManager::SelectTurnOrder()
   std::swap(sorted_players, players_);
 }
 
+void GameManager::EnsambleMatches() {
+  std::shuffle(std::begin(players_), std::end(players_), rng_);
+}
+
+
 void GameManager::StartGame()
 {
   SelectTurnOrder();

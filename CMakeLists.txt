@@ -1,13 +1,18 @@
 cmake_minimum_required(VERSION 3.14)
-project(MyProject VERSION 0.1.0)
+project(BattleRoyale VERSION 0.1.1)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 include(FetchContent)
 
-FetchContent_Declare(tabulate
-  GIT_REPOSITORY https://github.com/p-ranav/tabulate.git
-  GIT_TAG v1.4
-  GIT_PROGRESS TRUE
-)
-FetchContent_MakeAvailable(tabulate)
+
+# FetchContent_Declare(tabulate
+#   GIT_REPOSITORY https://github.com/p-ranav/tabulate.git
+#   GIT_TAG v1.4
+#   GIT_PROGRESS TRUE
+# )
+# FetchContent_MakeAvailable(tabulate)
 
 FetchContent_Declare(googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -26,49 +31,51 @@ FetchContent_Declare(fmt
 FetchContent_MakeAvailable(fmt)
 
 add_library(
-    ProjectCore STATIC
+    battleroyalecore STATIC
     src/game_manager.cpp
     src/interface.cpp
     src/player.cpp
+    src/tournament.cpp
 )
 
 target_include_directories(
-    ProjectCore
+    battleroyalecore
     PUBLIC
     src
 )
 
 target_link_libraries(
-    ProjectCore 
+    battleroyalecore 
     PUBLIC 
     fmt::fmt
 )
 
-target_compile_features(ProjectCore PRIVATE cxx_std_17)
+target_compile_features(battleroyalecore PRIVATE cxx_std_17)
 
 add_executable(
-    MyProject 
+    battleroyale 
     src/main.cpp
 )
     
 target_link_libraries(
-    MyProject 
+    battleroyale 
     PRIVATE
-    ProjectCore
+    battleroyalecore
 )
-target_compile_features(MyProject PRIVATE cxx_std_17)
+
+target_compile_features(battleroyale PRIVATE cxx_std_17)
 
 
 add_executable(
-    MyProjectTest
+    battleroyaleTest
     test/main.cpp
     )
     
-target_compile_features(MyProjectTest PRIVATE cxx_std_17)
+target_compile_features(battleroyaleTest PRIVATE cxx_std_17)
 target_link_libraries(
-    MyProjectTest
+    battleroyaleTest
     PUBLIC
-    ProjectCore
+    battleroyalecore
     gmock
     gmock_main
 )
