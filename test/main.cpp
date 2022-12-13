@@ -196,7 +196,7 @@ TEST(CharacterTest, HumanWarlockTheFiend)
   Abilities abilities;
   auto race = RaceFactory::Create(abilities, Race::Type::Human);
   auto the_class = ClassFactory::Create(abilities, Class::Type::Warlock, Warlock::Type::TheFiendWarlock);
-  auto character = Character(abilities, std::move(race),std::move(warlock_class));
+  auto character = Character(abilities, std::move(race),std::move(the_class));
   ASSERT_EQ(character.GetAbility(AbilityType::Strength).value().GetScore(), 9);
   ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).value().GetScore(), 13);
   ASSERT_EQ(character.GetAbility(AbilityType::Constitution).value().GetScore(), 15);
