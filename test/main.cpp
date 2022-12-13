@@ -1,8 +1,9 @@
+#include "character.h"
 #include "dice.h"
 #include "game_manager.h"
 #include "interface.h"
 #include "tournament.h"
-#include "character.h"
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -27,7 +28,7 @@ TEST(GameManager, NumberOfPlayersIsNotBiggerThanMaximumAllowed)
 
 void AddPlayersToGM(GameManager& gm, int number_of_players)
 {
-    for (int i = 0; i < number_of_players; i++)
+  for (int i = 0; i < number_of_players; i++)
   {
     gm.AddPlayer(Player{Player::Type::kType1, std::to_string(i)});
   }
@@ -150,4 +151,69 @@ TEST(AbilityTest, AbilityGetScore)
 
   ability.SetScore(30);
   ASSERT_EQ(ability.GetModifier(), 10);
+}
+
+#include "race.h"
+
+TEST(RaceTest, HumanCreation)
+{
+  Abilities abilities;
+  auto human = RaceFactory::Create(abilities, Race::Type::Human);
+  for (auto& ability: abilities.map)
+  {
+    ASSERT_EQ(ability.second.GetScore(), 1);
+  }
+}
+
+TEST(RaceTest, GithyankiCreation)
+{
+  Abilities abilities;
+  auto githyanki = RaceFactory::Create(abilities, Race::Type::Githyanki);
+  ASSERT_EQ(abilities.map.find(AbilityType::Intelligence)->second.GetScore(), 1);
+  ASSERT_EQ(abilities.map.find(AbilityType::Strength)->second.GetScore(), 2);
+}
+
+TEST(RaceTest, GoldDwarfCreation)
+{
+  Abilities abilities;
+  auto dwarf = RaceFactory::Create(abilities, Race::Type::Dwarf, Dwarf::Type::GoldDwarf);
+  ASSERT_EQ(abilities.map.find(AbilityType::Wisdom)->second.GetScore(), 1);
+  ASSERT_EQ(abilities.map.find(AbilityType::Constitution)->second.GetScore(), 2);
+}
+
+TEST(RaceTest, ShieldDwarfCreation)
+{
+  Abilities abilities;
+  auto dwarf = RaceFactory::Create(abilities, Race::Type::Dwarf, Dwarf::Type::ShieldDwarf);
+  ASSERT_EQ(abilities.map.find(AbilityType::Strength)->second.GetScore(), 2);
+  ASSERT_EQ(abilities.map.find(AbilityType::Constitution)->second.GetScore(), 2);
+}
+
+#include "character.h"
+
+TEST(CharacterTest, HumanWarlockTheFiend)
+{
+  Abilities abilities;
+  auto race = RaceFactory::Create(abilities, Race::Type::Human);
+  auto the_class = ClassFactory::Create(abilities, Class::Type::Warlock, Warlock::Type::TheFiendWarlock);
+  auto character = Character(abilities, std::move(race),std::move(warlock_class));
+  ASSERT_EQ(character.GetAbility(AbilityType::Strength).value().GetScore(), 9);
+  ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).value().GetScore(), 13);
+  ASSERT_EQ(character.GetAbility(AbilityType::Constitution).value().GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Intelligence).value().GetScore(), 14);
+  ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).value().GetScore(), 11);
+  ASSERT_EQ(character.GetAbility(AbilityType::Charisma).value().GetScore(), 16);
+}
+TEST(CharacterTest, StrongheartHalflingWizard)
+{
+  Abilities abilities;
+  auto race = RaceFactory::Create(abilities, Race::Type::Halfling, Halfling::Type::StrongheartHalfling);
+  auto the_class = ClassFactory::Create(abilities, Class::Type::Wizard);
+  auto character = Character(abilities, std::move(race),std::move(the_class));
+  ASSERT_EQ(character.GetAbility(AbilityType::Strength).value().GetScore(), 8);
+  ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).value().GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Constitution).value().GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Intelligence).value().GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).value().GetScore(), 10);
+  ASSERT_EQ(character.GetAbility(AbilityType::Charisma).value().GetScore(), 12);
 }

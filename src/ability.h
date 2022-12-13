@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <unordered_map>
+
 class Ability
 {
 public:
@@ -53,3 +55,16 @@ void operator+=(Ability& ability, int value)
   ability.score_ += value;
   ability.CalculateModifier();
 }
+
+struct Abilities
+{
+  std::unordered_map<Ability::Type, Ability> map;
+  Abilities():
+    map{std::unordered_map<Ability::Type, Ability>{{Ability::Type::Strength, Ability()},
+                                                   {Ability::Type::Charisma, Ability()},
+                                                   {Ability::Type::Constitution, Ability()},
+                                                   {Ability::Type::Dexterity, Ability()},
+                                                   {Ability::Type::Intelligence, Ability()},
+                                                   {Ability::Type::Wisdom, Ability()}}}
+  {}
+};
