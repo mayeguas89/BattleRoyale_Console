@@ -2,7 +2,7 @@
 #include "game_manager.h"
 #include "interface.h"
 #include "tournament.h"
-
+#include "character.h"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -125,7 +125,29 @@ TEST_F(GameManagerTest, PlayRound)
 
 TEST(Interface, SelectFromType)
 {
-  GameInterface::SelectFromType<Player::Type>();
-  GameInterface::SelectFromType<Player::Action>();
-  GameInterface::SelectFromType<Player::Weapon>();
+  // GameInterface::SelectFromType<Player::Type>();
+  // GameInterface::SelectFromType<Player::Action>();
+  // GameInterface::SelectFromType<Player::Weapon>();
+}
+
+TEST(AbilityTest, AbilityGetScore)
+{
+  Ability ability(1);
+  ASSERT_EQ(ability.GetModifier(), -5);
+
+  ability.SetScore(4);
+  ASSERT_EQ(ability.GetModifier(), -3);
+  ability.SetScore(5);
+  ASSERT_EQ(ability.GetModifier(), -3);
+
+  ability.SetScore(10);
+  ASSERT_EQ(ability.GetModifier(), 0);
+  ability.SetScore(11);
+  ASSERT_EQ(ability.GetModifier(), 0);
+
+  ability.SetScore(21);
+  ASSERT_EQ(ability.GetModifier(), 5);
+
+  ability.SetScore(30);
+  ASSERT_EQ(ability.GetModifier(), 10);
 }
