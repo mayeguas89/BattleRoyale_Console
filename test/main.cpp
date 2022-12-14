@@ -153,7 +153,8 @@ TEST(AbilityTest, AbilityGetScore)
   ASSERT_EQ(ability.GetModifier(), 10);
 }
 
-#include "race.h"
+#include "races/factory.h"
+#include "races/race.h"
 
 TEST(RaceTest, HumanCreation)
 {
@@ -190,13 +191,14 @@ TEST(RaceTest, ShieldDwarfCreation)
 }
 
 #include "character.h"
+#include "classes/factory.h"
 
 TEST(CharacterTest, HumanWarlockTheFiend)
 {
   Abilities abilities;
   auto race = RaceFactory::Create(abilities, Race::Type::Human);
   auto the_class = ClassFactory::Create(abilities, Class::Type::Warlock, Warlock::Type::TheFiendWarlock);
-  auto character = Character(abilities, std::move(race),std::move(the_class));
+  auto character = Character(abilities, std::move(race), std::move(the_class));
   ASSERT_EQ(character.GetAbility(AbilityType::Strength).value().GetScore(), 9);
   ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).value().GetScore(), 13);
   ASSERT_EQ(character.GetAbility(AbilityType::Constitution).value().GetScore(), 15);
@@ -204,16 +206,77 @@ TEST(CharacterTest, HumanWarlockTheFiend)
   ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).value().GetScore(), 11);
   ASSERT_EQ(character.GetAbility(AbilityType::Charisma).value().GetScore(), 16);
 }
+
 TEST(CharacterTest, StrongheartHalflingWizard)
 {
   Abilities abilities;
   auto race = RaceFactory::Create(abilities, Race::Type::Halfling, Halfling::Type::StrongheartHalfling);
   auto the_class = ClassFactory::Create(abilities, Class::Type::Wizard);
-  auto character = Character(abilities, std::move(race),std::move(the_class));
+  auto character = Character(abilities, std::move(race), std::move(the_class));
   ASSERT_EQ(character.GetAbility(AbilityType::Strength).value().GetScore(), 8);
   ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).value().GetScore(), 15);
   ASSERT_EQ(character.GetAbility(AbilityType::Constitution).value().GetScore(), 15);
   ASSERT_EQ(character.GetAbility(AbilityType::Intelligence).value().GetScore(), 15);
   ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).value().GetScore(), 10);
   ASSERT_EQ(character.GetAbility(AbilityType::Charisma).value().GetScore(), 12);
+}
+
+#include "health.h"
+
+struct HealthTest: Test
+{
+  int hit_points = 12;
+  Health h{hit_points};
+};
+
+TEST_F(HealthTest, HitPoints)
+{
+  ASSERT_EQ(h.GetHitPoints(), 12);
+}
+
+TEST_F(HealthTest, TakeDamageReturnsZeroIfDamageIsLessThanCurrentLife)
+{
+  ASSERT_EQ(h.TakeDamage(1), 0);
+}
+
+TEST_F(HealthTest, TakeDamageReturnsZeroIfDamageIsEqualToCurrentLife)
+{
+  ASSERT_EQ(h.TakeDamage(12), 0);
+}
+
+TEST_F(HealthTest, TakeDamageReturnsRemainingIfDamageIsGreaterThanCurrentLife)
+{
+  ASSERT_EQ(h.TakeDamage(13), 1);
+}
+
+TEST_F(HealthTest, Heal)
+{
+  auto last_life = h.GetCurrent();
+  h.Heal(2);
+  ASSERT_EQ(h.GetCurrent(), last_life + 2);
+}
+
+#include "turn_action.h"
+
+Character CreateCharacter(Race::Type race_type, Subrace subrace, Class::Type class_type, Subclass subclass)
+{
+  Abilities abilities;
+  auto race = RaceFactory::Create(abilities, race_type, subrace);
+  auto the_class = ClassFactory::Create(abilities, class_type, subclass);
+  Character character(abilities, std::move(race), std::move(the_class));
+  return character;
+}
+
+TEST(ActionTest, CastSpell)
+{
+  auto character_one =
+    CreateCharacter(Race::Type::Drow, Drow::Type::LolthSwornDrow, Class::Type::Warlock, Warlock::Type::TheFiendWarlock);
+  auto character_two = CreateCharacter(Race::Type::Halfling,
+                                       Halfling::Type::StrongheartHalfling,
+                                       Class::Type::Wizard,
+                                       std::monostate{});
+
+  Spell spell{"Arms of Hadar", 2, 6, Ability::Type::Strength};
+  auto attack = CastSpell{character_one, character_two, spell};
+  attack();
 }

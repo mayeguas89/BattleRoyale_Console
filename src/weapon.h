@@ -1,33 +1,36 @@
 #pragma once
-#include "dice.h"
-class Weapon
+#include "attack.h"
+
+class Weapon: public Attack
 {
 public:
-  enum class Type
-  {
-    MeleeWeapon,
-    RangedWeapon,
-    TwoHandedMeleeWeapon,
-  };
-  Weapon(int num_dices, int faces, Type type): num_dices_{num_dices}, faces_{faces}, type_{type} {}
+  Weapon(const std::string& name, int num_dices, int faces): Attack(num_dices, faces), name_{name} {}
   Weapon() = default;
-  int GetDamage()
+  virtual Ability::Type GetAttackAbilityModifier()
   {
-    int damage = 0;
-    for (int i = 0; i < num_dices_; i++)
-    {
-      damage += SingletonDice::Get().Roll(faces_);
-    }
-    return damage;
-  }
-
-  Type GetType()
-  {
-    return type_;
+    return Ability::Type::None;
   }
 
 protected:
-  int num_dices_;
-  int faces_;
-  Type type_;
+  std::string name_;
+};
+
+class MeleeWeapon: public Weapon
+{
+public:
+  MeleeWeapon(const std::string& name, int num_dices, int faces): Weapon(name, num_dices, faces) {}
+  Ability::Type GetAttackAbilityModifier() override
+  {
+    return Ability::Type::Strength;
+  }
+};
+
+class RangedWeapon: public Weapon
+{
+public:
+  RangedWeapon(const std::string& name, int num_dices, int faces): Weapon(name, num_dices, faces) {}
+  Ability::Type GetAttackAbilityModifier() override
+  {
+    return Ability::Type::Dexterity;
+  }
 };

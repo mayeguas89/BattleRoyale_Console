@@ -2,14 +2,17 @@
 
 #include "ability.h"
 #include "armor.h"
-#include "class.h"
+#include "classes/class.h"
 #include "death_saving_throw.h"
 #include "dice.h"
 #include "health.h"
 #include "helpers.h"
-#include "race.h"
+#include "races/race.h"
+#include "spell.h"
 #include "weapon.h"
 
+#include <memory>
+#include <optional>
 class Character
 {
 public:
@@ -26,9 +29,9 @@ public:
     race_{std::move(race)},
     class_{std::move(p_class)},
     state_{State::Alive},
-    health_{class_->GetHitDie()}
+    health_{class_->GetHitDice() + GetAbilityModifier(Ability::Type::Constitution)}
   {}
-
+  
   std::optional<Ability> GetAbility(Ability::Type type)
   {
     if (auto it = abilities_.map.find(type); it != abilities_.map.end())
@@ -38,20 +41,30 @@ public:
     return std::nullopt;
   }
 
+  int GetDifficultyClass()
+  {
+    auto ability = class_->GetSpellCastingAbility();
+    return 8 + GetAbilityModifier(ability);
+  }
+
   int GetArmorClass()
   {
-    return helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity)->GetModifier(), wear_armor_, shield_);
+    auto dexterity_modifier = GetAbilityModifier(Ability::Type::Dexterity);
+
+    return helpers::GetArmorClass(dexterity_modifier, wear_armor_, shield_);
   }
 
   // Logica: Si el AC es menor que el que da la armadura actual no se equipa
   void EquipWearAmor(const WearArmor& wear_armor)
   {
-    int previous_ac =
-      helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity)->GetModifier(), wear_armor_, shield_);
-    int new_ac = helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity)->GetModifier(), wear_armor, shield_);
+    auto dexterity_modifier = GetAbilityModifier(Ability::Type::Dexterity);
+
+    auto previous_ac = helpers::GetArmorClass(dexterity_modifier, wear_armor_, shield_);
+    auto new_ac = helpers::GetArmorClass(dexterity_modifier, wear_armor, shield_);
     if (new_ac > previous_ac)
       wear_armor_ = wear_armor;
   }
+
   // Logica: Si el AC es menor que el que da la armadura actual no se equipa
   void EquipShield(const Shield& shield)
   {
@@ -62,14 +75,16 @@ public:
       shield_ = shield;
   }
 
-  void EquipWeapon(const Weapon& weapon)
+  void EquipWeapon(Weapon weapon)
   {
     weapon_ = weapon;
   }
 
   int GetAttackModifier()
   {
-    return helpers::GetAttackModifier(weapon_, abilities_);
+    if (!weapon_)
+      return 0;
+    return GetAbilityModifier(weapon_->GetAttackAbilityModifier());
   }
 
   int RollDamage()
@@ -86,7 +101,11 @@ public:
 
     // magical methods such as a cure wounds spell or
     // a potion of healing can remove damage in an instant.return 0;
-    if(weapon_) return weapon_->GetDamage();
+    auto damage = GetAttackModifier();
+    if (weapon_)
+      damage += weapon_->GetDamage();
+
+    return damage;
   }
 
   // Massive damage can kill you instantly. When damage
@@ -101,7 +120,7 @@ public:
 
     if (current_life == 0)
     {
-      if (remaning_damage == health_.GetHitdie())
+      if (remaning_damage == health_.GetHitPoints())
       {
         state_ = State::Death;
       }
@@ -144,6 +163,14 @@ public:
       return;
   }
 
+  int SavingThrows(AbilityType ability_type)
+  {
+    auto roll = SingletonDice::Get().Roll(20);
+    if (class_->HasSavingThrowModifier(ability_type))
+      roll += GetAbilityModifier(ability_type);
+    return roll;
+  }
+
 protected:
   Abilities abilities_;
 
@@ -162,4 +189,15 @@ protected:
   State state_;
 
   std::optional<Weapon> weapon_;
+
+  std::vector<Spell> spells_;
+  std::vector<Cantrip> cantrips_;
+
+private:
+  int GetAbilityModifier(Ability::Type type)
+  {
+    if (auto ability = GetAbility(type); ability.has_value())
+      return ability->GetModifier();
+    return 0;
+  }
 };

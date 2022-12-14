@@ -13,7 +13,8 @@ public:
     Constitution,
     Intelligence,
     Wisdom,
-    Charisma
+    Charisma,
+    None
   };
 
   Ability(): score_{0}, modifier_{0} {}
@@ -23,12 +24,12 @@ public:
   }
   friend void operator+=(Ability& ability, int value);
 
-  int GetModifier()
+  int GetModifier() const
   {
     return modifier_;
   }
 
-  int GetScore()
+  int GetScore() const
   {
     return score_;
   }

@@ -1,27 +1,63 @@
 #pragma once
 
 // https://baldursgate3.wiki.fextralife.com/Armour+Class
-struct Shield;
-
-struct Armor
+class Armor
 {
-  Armor(int p_ac): ac{p_ac} {}
-  int ac;
-};
-
-struct Shield: public Armor
-{
-  Shield(int p_ac): Armor(p_ac) {}
-};
-
-struct WearArmor: public Armor
-{
-  enum class Type
+public:
+  Armor(int ac): ac_{ac} {}
+  virtual ~Armor() = default;
+  int GetArmorClass()
   {
-    LightArmor,
-    MediumArmor,
-    HeavyArmor
+    return ac_;
+  }
+
+protected:
+  int ac_;
+};
+
+class Shield: public Armor
+{
+public:
+  Shield(int ac): Armor(ac) {}
+};
+
+class WearArmor: public Armor
+{
+public:
+  WearArmor(int ac): Armor(ac) {}
+  virtual ~WearArmor() = default;
+  virtual int GetWearArmorClass(int dexterity_modifier)
+  {
+    return 0;
   };
-  WearArmor(int p_ac, Type p_type): Armor(p_ac), type{p_type} {}
-  Type type;
+};
+
+class LightArmor: public WearArmor
+{
+public:
+  LightArmor(int ac): WearArmor(ac) {}
+  int GetWearArmorClass(int dexterity_modifier) override
+  {
+    return ac_ + dexterity_modifier;
+  }
+};
+
+class MediumArmor: public WearArmor
+{
+public:
+  MediumArmor(int ac): WearArmor(ac) {}
+  int GetWearArmorClass(int dexterity_modifier) override
+  {
+    return ac_ + dexterity_modifier > 2 ? 2 : dexterity_modifier;
+  }
+};
+
+class HeavyArmor: public WearArmor
+{
+public:
+  HeavyArmor(int ac): WearArmor(ac) {}
+  int GetWearArmorClass(int dexterity_modifier) override
+  {
+    return ac_;
+  }
 };

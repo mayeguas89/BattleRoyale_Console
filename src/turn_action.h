@@ -2,6 +2,7 @@
 
 #include "character.h"
 #include "dice.h"
+#include "spell.h"
 
 /**
  * @brief Esta clase define los posibles movimientos que el personaje puede hacer
@@ -30,7 +31,7 @@ throws with advantage
 
 Use an object
  */
-class Action
+class TurnAction
 {
 public:
   enum class Type
@@ -40,26 +41,46 @@ public:
     Dodge,
     UseAnObject
   };
-  Action(Character& performer): performer_{performer} {}
+  TurnAction(Character& performer): performer_{performer} {}
+
+  virtual void operator()() const
+  {
+    return;
+  }
 
 protected:
   Character& performer_;
 };
 
-class Attack: public Action
+class ActionToTarget: public TurnAction
 {
 public:
-  Attack(Character& performer, Character& target): Action(performer), target_{target}
+  ActionToTarget(Character& performer, Character& target): TurnAction(performer), target_{target} {}
+
+protected:
+  Character& target_;
+};
+
+class AttackToTarget: public ActionToTarget
+{
+public:
+  AttackToTarget(Character& performer, Character& target): ActionToTarget(performer, target) {}
+
+  void operator()() const override
   {
-    if (AttackRoll()) { int damage = RollDamage(); }
+    if (AttackRoll())
+    {
+      RollDamage();
+    }
   }
 
+private:
   /**
    * @brief To make an attack roll a d20 and add the appropriate modifiers. If the
    * total of the roll plus modifiers equals or exceeds the target’s A rmor Class (AC), the attack hits.
    * 
    */
-  bool AttackRoll()
+  bool AttackRoll() const
   {
     // Roll A D20
     // Add modifiers
@@ -75,7 +96,7 @@ public:
       return false;
     if (attack_roll == 20)
       return true;
-    
+
     attack_roll += performer_.GetAttackModifier();
 
     // TODO: ADD PROEFICIENCY BONUS OF ATTACKER
@@ -85,12 +106,37 @@ public:
     return attack_roll > defender_ac ? true : false;
   }
 
-  int RollDamage()
+  void RollDamage() const
   {
-    int damage = performer_.RollDamage();
+    target_.ReceiveDamage(performer_.RollDamage());
+  }
+};
 
+class CastSpell: public ActionToTarget
+{
+public:
+  CastSpell(Character& performer, Character& target, const Spell& spell):
+    ActionToTarget(performer, target),
+    spell_{spell}
+  {}
+  void operator()() const override
+  {
+    auto dc = performer_.GetDifficultyClass();
+    auto st = target_.SavingThrows(spell_.GetAbilityTypeSavingThrows());
+    if ( dc > st)
+    {
+      target_.ReceiveDamage(spell_.GetDamage());
+      // target_.SetStatusEffect(spell_.GetStatusEffect());
+    }
+    else target_.ReceiveDamage(spell_.GetDamage()/2);
   }
 
 private:
-  Character& target_;
+  Spell spell_;
 };
+
+// class UseAnObject: public Action{
+//   public:
+//   UseAnObject(Character& performer, const Object& object): Action{performer} {}
+//   virtual void operator()() {}
+// }

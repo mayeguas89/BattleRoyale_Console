@@ -3,8 +3,8 @@
 class Health
 {
 public:
-  Health(int hit_die): hit_die_{hit_die}, current_life_{hit_die} {}
-
+  Health(int hit_points): hit_points_{hit_points}, current_life_{hit_points} {}
+  Health() = default;
   void Heal(int amount)
   {
     current_life_ += amount;
@@ -13,10 +13,11 @@ public:
   // Return remaining damage
   int TakeDamage(int amount)
   {
+    auto old_life = current_life_;
     current_life_ = std::max(current_life_ - amount, 0);
     if (current_life_ == 0)
     {
-      return std::abs(current_life_ - amount);
+      return std::abs(old_life - amount);
     }
     return 0;
   }
@@ -26,12 +27,12 @@ public:
     return current_life_;
   }
 
-  int GetHitdie()
+  int GetHitPoints()
   {
-    return hit_die_;
+    return hit_points_;
   }
 
 private:
-  int hit_die_;
+  int hit_points_;
   int current_life_;
 };
