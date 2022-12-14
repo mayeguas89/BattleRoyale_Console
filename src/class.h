@@ -27,6 +27,7 @@ public:
     hit_die_{hit_die},
     hit_die_per_level_{hit_die_per_level}
   {}
+  virtual ~Class() = default;
   int GetHitDie()
   {
     return hit_die_;

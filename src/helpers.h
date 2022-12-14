@@ -1,10 +1,21 @@
 #pragma once
+#include "ability.h"
 #include "armor.h"
+#include "weapon.h"
 
 #include <optional>
 
+
 namespace helpers
 {
+int GetAttackModifier(std::optional<Weapon>& weapon, const Abilities& abilities)
+{
+  if (!weapon)
+    return 0;
+  if (weapon->GetType() == Weapon::Type::RangedWeapon)
+    return abilities.map[Ability::Type::Dexterity];
+  return abilities.map[Ability::Type::Strength];
+}
 // Without Armor or a Shield, your character's AC equals 10 + their Dexterity modifier.
 int GetArmorClass(int dexterity_modifier, std::optional<WearArmor> wear_armor, std::optional<Shield> shield)
 {
