@@ -6,8 +6,9 @@ class Halfling: public Race
 public:
   enum class Type
   {
-    LightfootHalfling,
-    StrongheartHalfling
+    LightfootHalfling=0,
+    StrongheartHalfling,
+    None
   };
   struct Visitor
   {
@@ -26,6 +27,20 @@ public:
     abilities.map[AbilityType::Dexterity] += 2;
   }
 };
+
+inline std::string TypeToString(const Halfling::Type& type)
+{
+  using Type = Halfling::Type;
+  switch (type)
+  {
+    case Type::LightfootHalfling:
+      return "LightfootHalfling";
+    case Type::StrongheartHalfling:
+      return "StrongheartHalfling";
+    default:
+      return "INVALID";
+  }
+}
 
 class LightfootHalfling: public Halfling
 {

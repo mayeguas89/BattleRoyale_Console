@@ -7,8 +7,9 @@ class Warlock: public Class
 public:
   enum class Type
   {
-    TheFiendWarlock,
-    TheGreatOldOneWarlock
+    TheFiendWarlock=0,
+    TheGreatOldOneWarlock,
+    None
   };
   struct Visitor
   {
@@ -50,3 +51,18 @@ class TheGreatOldOneWarlock: public Warlock
 public:
   TheGreatOldOneWarlock(Abilities& abilities): Warlock(abilities) {}
 };
+
+
+inline std::string TypeToString(const Warlock::Type& type)
+{
+  using Type = Warlock::Type;
+  switch (type)
+  {
+    case Type::TheFiendWarlock:
+      return "TheFiendWarlock";
+    case Type::TheGreatOldOneWarlock:
+      return "TheGreatOldOneWarlock";
+    default:
+      return "INVALID";
+  }
+}

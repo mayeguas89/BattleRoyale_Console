@@ -12,7 +12,7 @@ class Spell: public NamedAttack
 public:
   enum class EffectType
   {
-    Damage,
+    Damage=0,
     Healing,
     None
   };

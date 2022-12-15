@@ -16,13 +16,23 @@ public:
     HalfElf,
     Tiefling,
     Drow,
-    Gnome
+    Gnome,
+    None
   };
+  
+  Race(Abilities& abilities)
+  {
+    instances_counter_++;
+  }
 
-  Race(Abilities& abilities) {}
+  int GetInstancesCounter()
+  {
+    return instances_counter_;
+  }
+
   virtual ~Race() = default;
-
 protected:
+  inline static int instances_counter_ = 0;
 };
 
 inline std::string TypeToString(const Race::Type& type)

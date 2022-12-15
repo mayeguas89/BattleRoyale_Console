@@ -19,10 +19,11 @@ class Character
 public:
   enum class State
   {
-    Alive,
+    Alive=0,
     Death,
     Unconscious,
     Stable,
+    None
   };
 
   Character(Abilities abilities, std::unique_ptr<Race> race, std::unique_ptr<Class> p_class):
@@ -32,6 +33,29 @@ public:
     state_{State::Alive},
     health_{class_->GetHitDice() + GetAbilityModifier(Ability::Type::Constitution)}
   {}
+
+  Character(const Character& other)
+  {
+    race_ = std::make_unique<Race>(*other.race_);
+    class_ = std::make_unique<Class>(*other.class_);
+    abilities_ = other.abilities_;
+
+    wear_armor_ = other.wear_armor_;
+    shield_ = other.shield_;
+
+    number_of_spell_slots_ = other.number_of_spell_slots_;
+
+    health_ = other.health_;
+
+    death_saving_throw_ = other.death_saving_throw_;
+
+    state_ = other.state_;
+
+    weapon_ = weapon_;
+
+    spells_ = other.spells_;
+    cantrips_ = other.cantrips_;
+  }
 
   std::optional<Ability> GetAbility(Ability::Type type)
   {

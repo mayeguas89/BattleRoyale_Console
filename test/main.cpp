@@ -17,11 +17,10 @@ TEST(Dice, Simple)
 
 TEST(GameManager, NumberOfPlayersIsNotBiggerThanMaximumAllowed)
 {
-  using Type = Player::Type;
   auto gm = GameManager::GetInstance();
   for (int i = 0; i <= GameManager::kMaxNumPlayers; i++)
   {
-    gm.AddPlayer(Player{Type::kType1, std::to_string(i)});
+    gm.AddPlayer(Player());
   }
   ASSERT_THAT(gm.GetPlayers(), SizeIs(GameManager::kMaxNumPlayers));
 }
@@ -30,7 +29,7 @@ void AddPlayersToGM(GameManager& gm, int number_of_players)
 {
   for (int i = 0; i < number_of_players; i++)
   {
-    gm.AddPlayer(Player{Player::Type::kType1, std::to_string(i)});
+    gm.AddPlayer(Player());
   }
 }
 
@@ -105,7 +104,7 @@ struct GameManagerTest: Test
     // for (int i = 0; i < GameManager::kMaxNumPlayers; i++)
     for (int i = 0; i < 5; i++)
     {
-      gm.AddPlayer(Player{Player::Type::kType1, std::to_string(i)});
+      gm.AddPlayer(Player());
     }
   }
 };

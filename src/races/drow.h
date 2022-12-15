@@ -6,8 +6,9 @@ class Drow: public Race
 public:
   enum class Type
   {
-    LolthSwornDrow,
-    SeldarineDrow
+    LolthSwornDrow=0,
+    SeldarineDrow,
+    None
   };
   struct Visitor
   {
@@ -27,6 +28,20 @@ public:
     abilities.map[AbilityType::Dexterity] += 1;
   }
 };
+
+inline std::string TypeToString(const Drow::Type& type)
+{
+  using Type = Drow::Type;
+  switch (type)
+  {
+    case Type::LolthSwornDrow:
+      return "LolthSwornDrow";
+    case Type::SeldarineDrow:
+      return "SeldarineDrow";
+    default:
+      return "INVALID";
+  }
+}
 
 class LolthSwornDrow: public Drow
 {

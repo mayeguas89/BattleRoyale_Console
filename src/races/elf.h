@@ -6,8 +6,9 @@ class Elf: public Race
 public:
   enum class Type
   {
-    HighElf,
-    WoodElf
+    HighElf=0,
+    WoodElf,
+    None
   };
   struct Visitor
   {
@@ -26,6 +27,20 @@ public:
     abilities.map[AbilityType::Dexterity] += 2;
   }
 };
+
+inline std::string TypeToString(const Elf::Type& type)
+{
+  using Type = Elf::Type;
+  switch (type)
+  {
+    case Type::HighElf:
+      return "HighElf";
+    case Type::WoodElf:
+      return "WoodElf";
+    default:
+      return "INVALID";
+  }
+}
 
 class HighElf: public Elf
 {

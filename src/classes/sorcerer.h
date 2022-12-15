@@ -5,8 +5,9 @@ class Sorcerer: public Class
 public:
   enum class Type
   {
-    WildMagicSorcerer,
-    DraconicBloodlineSorcerer
+    WildMagicSorcerer = 0,
+    DraconicBloodlineSorcerer,
+    None
   };
   struct Visitor
   {
@@ -47,3 +48,17 @@ class DraconicBloodlineSorcerer: public Sorcerer
 public:
   DraconicBloodlineSorcerer(Abilities& abilities): Sorcerer(abilities) {}
 };
+
+inline std::string TypeToString(const Sorcerer::Type& type)
+{
+  using Type = Sorcerer::Type;
+  switch (type)
+  {
+    case Type::WildMagicSorcerer:
+      return "WildMagicSorcerer";
+    case Type::DraconicBloodlineSorcerer:
+      return "DraconicBloodlineSorcerer";
+    default:
+      return "INVALID";
+  }
+}

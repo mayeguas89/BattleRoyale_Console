@@ -6,9 +6,10 @@ class Gnome: public Race
 public:
   enum class Type
   {
-    DeepGnome,
+    DeepGnome=0,
     ForestGnome,
-    RockGnome
+    RockGnome,
+    None
   };
   struct Visitor
   {
@@ -27,6 +28,22 @@ public:
     abilities.map[AbilityType::Intelligence] += 1;
   }
 };
+
+inline std::string TypeToString(const Gnome::Type& type)
+{
+  using Type = Gnome::Type;
+  switch (type)
+  {
+    case Type::DeepGnome:
+      return "DeepGnome";
+    case Type::ForestGnome:
+      return "ForestGnome";
+    case Type::RockGnome:
+      return "RockGnome";
+    default:
+      return "INVALID";
+  }
+}
 
 class DeepGnome: public Gnome
 {

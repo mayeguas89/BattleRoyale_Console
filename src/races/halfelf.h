@@ -6,8 +6,9 @@ class HalfElf: public Race
 public:
   enum class Type
   {
-    HighHalfElf,
-    WoodHalfElf
+    HighHalfElf=0,
+    WoodHalfElf,
+    None
   };
   struct Visitor
   {
@@ -27,6 +28,22 @@ public:
     // TODO: Add +2 points in other habilities
   }
 };
+
+
+inline std::string TypeToString(const HalfElf::Type& type)
+{
+  using Type = HalfElf::Type;
+  switch (type)
+  {
+    case Type::HighHalfElf:
+      return "HighHalfElf";
+    case Type::WoodHalfElf:
+      return "WoodHalfElf";
+    default:
+      return "INVALID";
+  }
+}
+
 
 class HighHalfElf: public HalfElf
 {

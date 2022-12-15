@@ -6,8 +6,9 @@ class Dwarf: public Race
 public:
   enum class Type
   {
-    GoldDwarf,
-    ShieldDwarf
+    GoldDwarf=0,
+    ShieldDwarf,
+    None
   };
 
   struct Visitor
@@ -28,6 +29,20 @@ public:
     abilities.map[AbilityType::Constitution] += 2;
   }
 };
+
+inline std::string TypeToString(const Dwarf::Type& type)
+{
+  using Type = Dwarf::Type;
+  switch (type)
+  {
+    case Type::GoldDwarf:
+      return "GoldDwarf";
+    case Type::ShieldDwarf:
+      return "ShieldDwarf";
+    default:
+      return "INVALID";
+  }
+}
 
 class GoldDwarf: public Dwarf
 {

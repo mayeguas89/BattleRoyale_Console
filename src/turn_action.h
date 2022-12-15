@@ -36,10 +36,11 @@ class TurnAction
 public:
   enum class Type
   {
-    Attack,
+    Attack = 0,
     CastASpell,
     Dodge,
-    UseAnObject
+    UseAnObject,
+    None
   };
   TurnAction(Character& performer): performer_{performer} {}
 
@@ -123,12 +124,13 @@ public:
   {
     auto dc = performer_.GetDifficultyClass();
     auto st = target_.SavingThrows(spell_.GetAbilityTypeSavingThrows());
-    if ( dc > st)
+    if (dc > st)
     {
       target_.ReceiveDamage(spell_.GetDamage());
       // target_.SetStatusEffect(spell_.GetStatusEffect());
     }
-    else target_.ReceiveDamage(spell_.GetDamage()/2);
+    else
+      target_.ReceiveDamage(spell_.GetDamage() / 2);
   }
 
 private:

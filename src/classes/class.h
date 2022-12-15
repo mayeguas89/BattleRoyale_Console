@@ -11,7 +11,7 @@ class Class
 public:
   enum class Type
   {
-    Barbarian,
+    Barbarian = 0,
     Bard,
     Cleric,
     Druid,
@@ -20,11 +20,17 @@ public:
     Rogue,
     Sorcerer,
     Warlock,
-    Wizard
+    Wizard,
+    None
   };
 
-  Class(Abilities& abilities, int hit_dice, int hit_die_per_level) {}
+  Class(Abilities& abilities, int hit_dice, int hit_die_per_level)
+  {
+    instances_counter_++;
+  }
+
   virtual ~Class() = default;
+
   virtual AbilityType GetSpellCastingAbility()
   {
     return AbilityType::None;
@@ -33,6 +39,11 @@ public:
   int GetHitDice()
   {
     return hit_dice_;
+  }
+
+  int GetInstancesCounter()
+  {
+    return instances_counter_;
   }
 
   bool HasSavingThrowModifier(AbilityType ability_type)
@@ -45,6 +56,7 @@ protected:
   int hit_die_per_level_;
   std::vector<AbilityType> primary_hability_;
   std::vector<AbilityType> saving_throw;
+  inline static int instances_counter_ = 0;
 };
 
 inline std::string TypeToString(const Class::Type& type)

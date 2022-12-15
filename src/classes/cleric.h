@@ -2,14 +2,18 @@
 
 #include "class.h"
 
+#include <optional>
+
+
 class Cleric: public Class
 {
 public:
   enum class Type
   {
-    LifeDomainCleric,
+    LifeDomainCleric=0,
     LightDomainCleric,
-    TrickeryDomainCleric
+    TrickeryDomainCleric,
+    None
   };
   struct Visitor
   {
@@ -76,3 +80,19 @@ public:
     abilities.map[AbilityType::Charisma] += 8;
   }
 };
+
+inline std::string TypeToString(const Cleric::Type& type)
+{
+  using Type = Cleric::Type;
+  switch (type)
+  {
+    case Type::LifeDomainCleric:
+      return "LifeDomainCleric";
+    case Type::LightDomainCleric:
+      return "LightDomainCleric";
+    case Type::TrickeryDomainCleric:
+      return "TrickeryDomainCleric";
+    default:
+      return "INVALID";
+  }
+}

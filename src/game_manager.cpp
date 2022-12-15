@@ -67,62 +67,63 @@ void GameManager::AddPlayer(const Player& p)
 
 void GameManager::PlayRound()
 {
-  static int round = 0;
-  fmt::print("\n\t**Round {}**\n", round);
-  auto dist = std::uniform_int_distribution<std::mt19937::result_type>(0, players_.size() - 1);
+  // static int round = 0;
+  // fmt::print("\n\t**Round {}**\n", round);
+  // auto dist = std::uniform_int_distribution<std::mt19937::result_type>(0, players_.size() - 1);
 
-  for (size_t i = 0; i < players_.size(); i++)
-  {
-    auto& player = players_.at(i);
-    fmt::print("Player {} turn\n", i);
+  // for (size_t i = 0; i < players_.size(); i++)
+  // {
+  //   auto& player = players_.at(i);
+  //   fmt::print("Player {} turn\n", i);
 
-    if (player.IsDead())
-      continue;
+  //   if (player.IsDead())
+  //     continue;
 
-    auto enemy_index = dist(rng_);
+  //   auto enemy_index = dist(rng_);
 
-    while (enemy_index == i)
-      enemy_index = dist(rng_);
+  //   while (enemy_index == i)
+  //     enemy_index = dist(rng_);
 
-    auto& enemy = players_.at(enemy_index);
-    auto action = player.PlayRound();
-    switch (action)
-    {
-      case Player::Action::kHeal:
-      {
-        fmt::print("Player {} se cura a si mismo\n", i);
-        player.Heal();
-        break;
-      }
-      case Player::Action::kAttack:
-      {
-        fmt::print("Player {} attacks with power {} to player {}\n", i, player.GetAttack(), enemy_index);
-        enemy.ReceiveDamage(player.GetAttack());
-        break;
-      }
+  //   auto& enemy = players_.at(enemy_index);
+  //   auto action = player.PlayRound();
+  //   switch (action)
+  //   {
+  //     case Player::Action::kHeal:
+  //     {
+  //       fmt::print("Player {} se cura a si mismo\n", i);
+  //       player.Heal();
+  //       break;
+  //     }
+  //     case Player::Action::kAttack:
+  //     {
+  //       fmt::print("Player {} attacks with power {} to player {}\n", i, player.GetAttack(), enemy_index);
+  //       enemy.ReceiveDamage(player.GetAttack());
+  //       break;
+  //     }
 
-      default:
-        break;
-    }
-    if (GetPlayersAlive() == 1)
-      break;
-  }
+  //     default:
+  //       break;
+  //   }
+  //   if (GetPlayersAlive() == 1)
+  //     break;
+  // }
 
-  fmt::print("\n**Player State**\n");
-  PrintPlayers();
+  // fmt::print("\n**Player State**\n");
+  // PrintPlayers();
 
-  auto remove_player = [](auto player) { return player.IsDead(); };
-  players_.erase(std::remove_if(players_.begin(), players_.end(), remove_player), players_.end());
+  // auto remove_player = [](auto player) { return player.IsDead(); };
+  // players_.erase(std::remove_if(players_.begin(), players_.end(), remove_player), players_.end());
 
-  if (GetPlayersAlive() == 1)
-    is_running_ = false;
+  // if (GetPlayersAlive() == 1)
+  //   is_running_ = false;
 
-  round++;
+  // round++;
 }
 
 int GameManager::GetPlayersAlive()
 {
-  return std::count_if(players_.begin(), players_.end(), [](auto& player) { return !player.IsDead(); });
+  // return std::count_if(players_.begin(), players_.end(), [](auto& player) { return !player.IsDead(); });
+  return 0;
 }
 
 void GameManager::PrintPlayers()

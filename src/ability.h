@@ -1,6 +1,9 @@
 
 #pragma once
 
+#include <fmt/format.h>
+#include <tabulate/table.hpp>
+
 #include <unordered_map>
 
 class Ability
@@ -18,10 +21,12 @@ public:
   };
 
   Ability(): score_{0}, modifier_{0} {}
+
   Ability(int p_value): score_{p_value}
   {
     CalculateModifier();
   }
+
   friend void operator+=(Ability& ability, int value);
 
   int GetModifier() const
@@ -51,7 +56,7 @@ private:
   }
 };
 
-void operator+=(Ability& ability, int value)
+inline void operator+=(Ability& ability, int value)
 {
   ability.score_ += value;
   ability.CalculateModifier();
@@ -59,7 +64,6 @@ void operator+=(Ability& ability, int value)
 
 struct Abilities
 {
-  std::unordered_map<Ability::Type, Ability> map;
   Abilities():
     map{std::unordered_map<Ability::Type, Ability>{{Ability::Type::Strength, Ability()},
                                                    {Ability::Type::Charisma, Ability()},
@@ -68,6 +72,9 @@ struct Abilities
                                                    {Ability::Type::Intelligence, Ability()},
                                                    {Ability::Type::Wisdom, Ability()}}}
   {}
+  std::unordered_map<Ability::Type, Ability> map;
+
+  friend std::ostream& operator<<(std::ostream& os, const Abilities& abilities);
 };
 
 inline std::string AbilityTypeToString(Ability::Type type)
@@ -105,4 +112,17 @@ inline Ability::Type StringToAbilityType(const std::string& type)
   if (type == "Charisma")
     return Ability::Type::Charisma;
   return Ability::Type::None;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const Abilities& abilities)
+{
+  tabulate::Table abilities_table;
+  abilities_table.add_row({"Name", "Value", "Modifier"});
+  for (auto it = abilities.map.begin(); it != abilities.map.end(); it++)
+  {
+    abilities_table.add_row({AbilityTypeToString(it->first),
+                             fmt::format("{}", it->second.GetScore()),
+                             fmt::format("{}", it->second.GetModifier())});
+  }
+  return os << abilities_table;
 }

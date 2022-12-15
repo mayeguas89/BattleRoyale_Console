@@ -66,6 +66,7 @@ target_link_libraries(
     PUBLIC 
     fmt::fmt
     nlohmann_json::nlohmann_json
+    tabulate::tabulate
 )
 
 target_compile_features(battleroyalecore PRIVATE cxx_std_17)

@@ -6,10 +6,12 @@ class Tiefling: public Race
 public:
   enum class Type
   {
-    AsmodeusTiefling,
+    AsmodeusTiefling = 0,
     MephistophelesTiefling,
-    ZarielTiefling
+    ZarielTiefling,
+    None
   };
+
   struct Visitor
   {
     std::optional<Type> operator()(Type type) const
@@ -22,8 +24,25 @@ public:
       return std::nullopt;
     }
   };
+  
   Tiefling(Abilities& abilities): Race(abilities) {}
 };
+
+inline std::string TypeToString(const Tiefling::Type& type)
+{
+  using Type = Tiefling::Type;
+  switch (type)
+  {
+    case Type::AsmodeusTiefling:
+      return "AsmodeusTiefling";
+    case Type::MephistophelesTiefling:
+      return "MephistophelesTiefling";
+    case Type::ZarielTiefling:
+      return "ZarielTiefling";
+    default:
+      return "INVALID";
+  }
+}
 
 class AsmodeusTiefling: public Tiefling
 {
