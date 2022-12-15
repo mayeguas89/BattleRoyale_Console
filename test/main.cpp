@@ -269,14 +269,100 @@ Character CreateCharacter(Race::Type race_type, Subrace subrace, Class::Type cla
 
 TEST(ActionTest, CastSpell)
 {
-  auto character_one =
-    CreateCharacter(Race::Type::Drow, Drow::Type::LolthSwornDrow, Class::Type::Warlock, Warlock::Type::TheFiendWarlock);
+  auto character_one = CreateCharacter(Race::Type::Drow,
+                                       Drow::Type::LolthSwornDrow,
+                                       Class::Type::Warlock,
+                                       Warlock::Type::TheFiendWarlock);
   auto character_two = CreateCharacter(Race::Type::Halfling,
                                        Halfling::Type::StrongheartHalfling,
                                        Class::Type::Wizard,
                                        std::monostate{});
 
-  Spell spell{"Arms of Hadar", 2, 6, Ability::Type::Strength};
+  Spell spell{"Arms of Hadar", 2, 6, 1, Ability::Type::Strength};
   auto attack = CastSpell{character_one, character_two, spell};
   attack();
+}
+
+#include "weapon_data_base.h"
+
+#include <fstream>
+
+TEST(WeaponContainerTest, MeleeWeaponTest)
+{
+  WeaponDataBase weapon_db;
+  weapon_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+                     "simpleRangedWeapons.json",
+                     "C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+                     "simpleMeleeWeapons.json"});
+  auto barbed_dagger = weapon_db.GetDataByName("Barbed Dagger");
+
+  ASSERT_TRUE(barbed_dagger);
+  ASSERT_EQ(barbed_dagger->GetFaces(), 4);
+  ASSERT_EQ(barbed_dagger->GetNumDices(), 2);
+  ASSERT_EQ(barbed_dagger->GetAttackAbilityModifier(), Ability::Type::Strength);
+
+  auto dart = weapon_db.GetDataByName("Dart");
+  ASSERT_TRUE(dart);
+  ASSERT_EQ(dart->GetFaces(), 4);
+  ASSERT_EQ(dart->GetNumDices(), 1);
+  ASSERT_EQ(dart->GetAttackAbilityModifier(), Ability::Type::Dexterity);
+}
+
+#include "spell_data_base.h"
+
+TEST(SpellContainerTest, SpellTest)
+{
+  SpellDataBase spell_db;
+  spell_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+                    "final_spells.json"});
+  auto inflinct_wounds = spell_db.GetDataByName("Inflict Wounds");
+  ASSERT_TRUE(inflinct_wounds);
+  ASSERT_EQ(inflinct_wounds->GetFaces(), 10);
+  ASSERT_EQ(inflinct_wounds->GetNumDices(), 3);
+}
+
+#include "wear_armor_data_base.h"
+
+TEST(ArmorDataBaseTest, ArmorTest)
+{
+  WearArmorDataBase armor_db;
+  armor_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+                    "final_armor.json"});
+  auto leather_armor = armor_db.GetDataByName("Leather Armor");
+  auto breastplate = armor_db.GetDataByName("Breastplate");
+  auto chain_mail = armor_db.GetDataByName("Chain Mail");
+  ASSERT_TRUE(chain_mail);
+  ASSERT_EQ(leather_armor->GetWearArmorClass(5), leather_armor->GetArmorClass() + 5);
+  ASSERT_EQ(breastplate->GetWearArmorClass(5), breastplate->GetArmorClass() + 2);
+  ASSERT_EQ(breastplate->GetWearArmorClass(1), breastplate->GetArmorClass() + 1);
+  ASSERT_EQ(chain_mail->GetWearArmorClass(5), chain_mail->GetArmorClass());
+}
+
+TEST(CharacterAssignWeaponAndArmors, Simple)
+{
+  auto character =
+    CreateCharacter(Race::Type::Dwarf, Dwarf::Type::ShieldDwarf, Class::Type::Wizard, std::monostate{});
+  WeaponDataBase weapon_db;
+  weapon_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+                     "simpleRangedWeapons.json",
+                     "C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+                     "simpleMeleeWeapons.json"});
+  WearArmorDataBase armor_db;
+  armor_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+                    "final_armor.json"});
+
+  ASSERT_EQ(character.GetAttackModifier(), 0);
+
+  auto handaxe = weapon_db.GetDataByName("Handaxe");
+  ASSERT_TRUE(handaxe);
+  auto armor = armor_db.GetDataByName("Studded Leather Armor");
+  ASSERT_TRUE(armor);
+
+  auto ability_modifier = character.GetAbility(handaxe->GetAttackAbilityModifier())->GetModifier();
+  character.EquipWeapon(handaxe);
+  character.EquipWearAmor(armor);
+
+  ASSERT_EQ(character.GetAttackModifier(), ability_modifier);
+  // Va con el dado por lo que no se puede saber
+  // ASSERT_EQ(character.RollDamage(), character.GetAttackModifier() + ability_modifier);
 }

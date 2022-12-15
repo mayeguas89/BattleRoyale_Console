@@ -1,0 +1,1069 @@
+[
+    {
+        "name": "Acid Splash",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "1d6",
+            "Damage Type": "Acid",
+            "data-Cantrip Scaling": "dice"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 0,
+        "classes": [
+            "Sorcerer",
+            "Wizard",
+            "Artificer (Revisited)",
+            "Artificer"
+        ],
+        "damageInflict": [
+            "acid"
+        ]
+    },
+    {
+        "name": "Arms of Hadar",
+        "source": "PHB",
+        "data": {
+            "Save": "Strength",
+            "Damage": "2d6",
+            "Damage Type": "Necrotic",
+            "Save Success": "Half damage and can take reactions",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "1",
+            "Target": "Each creature within 10 feet of you"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 1,
+        "classes": [
+            "Warlock"
+        ],
+        "damageInflict": [
+            "necrotic"
+        ]
+    },
+    {
+        "name": "Blight",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "8d8",
+            "Damage Type": "Necrotic",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 4,
+        "classes": [
+            "Druid",
+            "Sorcerer",
+            "Warlock",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "necrotic"
+        ]
+    },
+    {
+        "name": "Burning Hands",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "3d6",
+            "Target": "Every creature in a 15-foot cone",
+            "Damage Type": "Fire",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 1,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "fire"
+        ]
+    },
+    {
+        "name": "Chain Lightning",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "10d8",
+            "Damage Type": "Lightning",
+            "Save Success": "Half damage"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 6,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "lightning"
+        ]
+    },
+    {
+        "name": "Chromatic Orb",
+        "source": "PHB",
+        "data": {
+            "Damage": "3d8",
+            "Damage Type": "Acid, cold, fire, lightning, poison, or thunder",
+            "Spell Attack": "Ranged",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1",
+            "Target": "A creature that you can see within range"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 1,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "acid",
+            "cold",
+            "fire",
+            "lightning",
+            "poison",
+            "thunder"
+        ]
+    },
+    {
+        "name": "Circle of Death",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "8d6",
+            "Target": "Each creature in a 60-foot-radius sphere from a point within range",
+            "Damage Type": "Necrotic",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "2"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 6,
+        "classes": [
+            "Sorcerer",
+            "Warlock",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "necrotic"
+        ]
+    },
+    {
+        "name": "Cone of Cold",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "8d8",
+            "Target": "Each creature in a 60-foot cone",
+            "Damage Type": "Cold",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 5,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "cold"
+        ]
+    },
+    {
+        "name": "Conjure Barrage",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "3d8",
+            "Damage Type": "Same as weapon or ammunition used as component",
+            "Save Success": "half damage",
+            "Target": "Each creature in a 60-foot cone"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 3,
+        "classes": [
+            "Ranger"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Conjure Volley",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "8d8",
+            "Damage Type": "Same as that of the ammunition or weapon",
+            "Save Success": "Half damage",
+            "Target": "Each creature in a 40-foot-radius, 20-foot-high cylinder centered on a point within range"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 5,
+        "classes": [
+            "Ranger"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Cure Wounds",
+        "source": "PHB",
+        "data": {
+            "Healing": "1d8",
+            "Add Casting Modifier": "Yes",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "level": 1,
+        "classes": [
+            "Bard",
+            "Cleric",
+            "Druid",
+            "Paladin",
+            "Ranger",
+            "Artificer",
+            "Artificer (Revisited)",
+            "Artificer"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Destructive Wave",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "5d6",
+            "Damage Type": "Thunder",
+            "Save Success": "Half damage and not prone",
+            "Target": "Each creature you choose within 30 feet of you",
+            "Secondary Damage": "5d6",
+            "Secondary Damage Type": "Radiant or necrotic (your choice)"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save",
+            "secondaryDamageCondition": "save"
+        },
+        "level": 5,
+        "classes": [
+            "Paladin"
+        ],
+        "damageInflict": [
+            "necrotic",
+            "radiant",
+            "thunder"
+        ]
+    },
+    {
+        "name": "Disintegrate",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "10d6 + 40",
+            "Damage Type": "Force",
+            "Save Success": "No damage",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "3"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 6,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "force"
+        ]
+    },
+    {
+        "name": "Dissonant Whispers",
+        "source": "PHB",
+        "data": {
+            "Save": "Wisdom",
+            "Damage": "3d6",
+            "Damage Type": "Psychic",
+            "Save Success": "Half damage and doesn't have to move away",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "1",
+            "Target": "One creature of your choice within range"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 1,
+        "classes": [
+            "Bard"
+        ],
+        "damageInflict": [
+            "psychic"
+        ]
+    },
+    {
+        "name": "Eldritch Blast",
+        "source": "PHB",
+        "data": {
+            "Damage": "1d10",
+            "Damage Type": "Force",
+            "Spell Attack": "Ranged"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 0,
+        "classes": [
+            "Warlock"
+        ],
+        "damageInflict": [
+            "force"
+        ]
+    },
+    {
+        "name": "Feeblemind",
+        "source": "PHB",
+        "data": {
+            "Save": "Intelligence",
+            "Damage": "4d6",
+            "Damage Type": "Psychic"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "auto"
+        },
+        "level": 8,
+        "classes": [
+            "Bard",
+            "Druid",
+            "Warlock",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "psychic"
+        ]
+    },
+    {
+        "name": "Finger of Death",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "7d8 + 30",
+            "Damage Type": "Necrotic",
+            "Save Success": "Half damage"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 7,
+        "classes": [
+            "Sorcerer",
+            "Warlock",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "necrotic"
+        ]
+    },
+    {
+        "name": "Fire Bolt",
+        "source": "PHB",
+        "data": {
+            "Damage": "1d10",
+            "Damage Type": "Fire",
+            "Spell Attack": "Ranged",
+            "data-Cantrip Scaling": "dice"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 0,
+        "classes": [
+            "Sorcerer",
+            "Wizard",
+            "Artificer (Revisited)",
+            "Artificer"
+        ],
+        "damageInflict": [
+            "fire"
+        ]
+    },
+    {
+        "name": "Fire Storm",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "7d10",
+            "Damage Type": "Fire",
+            "Save Success": "Half damage"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 7,
+        "classes": [
+            "Cleric",
+            "Druid",
+            "Sorcerer"
+        ],
+        "damageInflict": [
+            "fire"
+        ]
+    },
+    {
+        "name": "Fireball",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "8d6",
+            "Target": "Each creature in a 20-foot-radius sphere centered on a point within range",
+            "Damage Type": "Fire",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 3,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "fire"
+        ]
+    },
+    {
+        "name": "Flame Strike",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "4d6",
+            "Target": "Each creature in a 10-foot-radius, 40-foot-high cylinder centered on a point within range",
+            "Damage Type": "Fire",
+            "Save Success": "Half damage",
+            "Secondary Damage": "4d6",
+            "Higher Spell Slot Die": "d6",
+            "Secondary Damage Type": "Radiant",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save",
+            "secondaryDamageCondition": "save"
+        },
+        "level": 5,
+        "classes": [
+            "Cleric"
+        ],
+        "damageInflict": [
+            "fire",
+            "radiant"
+        ]
+    },
+    {
+        "name": "Harm",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "14d6",
+            "Damage Type": "Necrotic",
+            "Save Success": "Half damage"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 6,
+        "classes": [
+            "Cleric"
+        ],
+        "damageInflict": [
+            "necrotic"
+        ]
+    },
+    {
+        "name": "Heal",
+        "source": "PHB",
+        "data": {
+            "Healing": "70",
+            "Higher Level Healing": "10"
+        },
+        "level": 6,
+        "classes": [
+            "Cleric",
+            "Druid"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Healing Word",
+        "source": "PHB",
+        "data": {
+            "Healing": "1d4",
+            "Add Casting Modifier": "Yes",
+            "Higher Spell Slot Die": "d4",
+            "Higher Spell Slot Dice": "1"
+        },
+        "level": 1,
+        "classes": [
+            "Bard",
+            "Cleric",
+            "Druid"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Hellish Rebuke",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "2d10",
+            "Damage Type": "Fire",
+            "Save Success": "half damage",
+            "Higher Spell Slot Die": "d10",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 1,
+        "classes": [
+            "Warlock"
+        ],
+        "damageInflict": [
+            "fire"
+        ]
+    },
+    {
+        "name": "Ice Storm",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "2d8",
+            "Target": "Each creature in a 20-foot-radius, 40-foot-high cylinder centered on a point within range",
+            "Damage Type": "Bludgeoning",
+            "Save Success": "Half damage",
+            "Secondary Damage": "4d6",
+            "Higher Spell Slot Die": "d8",
+            "Secondary Damage Type": "Cold",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save",
+            "secondaryDamageCondition": "save"
+        },
+        "level": 4,
+        "classes": [
+            "Druid",
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "bludgeoning",
+            "cold"
+        ]
+    },
+    {
+        "name": "Inflict Wounds",
+        "source": "PHB",
+        "data": {
+            "Damage": "3d10",
+            "Damage Type": "Necrotic",
+            "Spell Attack": "Melee",
+            "Higher Spell Slot Die": "d10",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 1,
+        "classes": [
+            "Cleric"
+        ],
+        "damageInflict": [
+            "necrotic"
+        ]
+    },
+    {
+        "name": "Lightning Bolt",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "8d6",
+            "Target": "Each creature in the line",
+            "Damage Type": "Lightning",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 3,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "lightning"
+        ]
+    },
+    {
+        "name": "Magic Missile",
+        "source": "PHB",
+        "data": {
+            "Damage": "3d4 + 3",
+            "Damage Type": "Force",
+            "Higher Spell Slot Die": "d4",
+            "Higher Spell Slot Dice": "1",
+            "Higher Spell Slot Bonus": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "auto"
+        },
+        "level": 1,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "force"
+        ]
+    },
+    {
+        "name": "Mass Cure Wounds",
+        "source": "PHB",
+        "data": {
+            "Target": "Up to 6 creatures in a 30-foot-radius sphere centered on a point",
+            "Healing": "3d8",
+            "Add Casting Modifier": "Yes",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "level": 5,
+        "classes": [
+            "Bard",
+            "Cleric",
+            "Druid"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Mass Healing Word",
+        "source": "PHB",
+        "data": {
+            "Healing": "1d4",
+            "Add Casting Modifier": "Yes",
+            "Higher Spell Slot Die": "d4",
+            "Higher Spell Slot Dice": "1"
+        },
+        "level": 3,
+        "classes": [
+            "Cleric"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Melf's Acid Arrow",
+        "source": "PHB",
+        "data": {
+            "Damage": "4d4",
+            "Damage Type": "Acid",
+            "Spell Attack": "Ranged",
+            "Secondary Damage": "2d4",
+            "Higher Spell Slot Die": "d4",
+            "Secondary Damage Type": "Acid",
+            "Higher Spell Slot Dice": "1",
+            "Secondary Higher Spell Slot Die": "d4",
+            "Secondary Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack",
+            "secondaryDamageCondition": "attack"
+        },
+        "level": 2,
+        "classes": [
+            "Wizard"
+        ],
+        "damageInflict": [
+            "acid"
+        ]
+    },
+    {
+        "name": "Meteor Swarm",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "20d6",
+            "Target": "Each creature in a 40-foot-radius sphere centered on four different points you can see within range",
+            "Damage Type": "Fire",
+            "Save Success": "Half damage",
+            "Secondary Damage": "20d6",
+            "Secondary Damage Type": "Bludgeoning"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save",
+            "secondaryDamageCondition": "save"
+        },
+        "level": 9,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "bludgeoning",
+            "fire"
+        ]
+    },
+    {
+        "name": "Otiluke's Freezing Sphere",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "10d6",
+            "Target": "Each creature in a 60-foot-radius sphere centered on a point",
+            "Damage Type": "Cold",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d6",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 6,
+        "classes": [
+            "Wizard"
+        ],
+        "damageInflict": [
+            "cold"
+        ]
+    },
+    {
+        "name": "Poison Spray",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "1d12",
+            "Damage Type": "Poison",
+            "data-Cantrip Scaling": "dice"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 0,
+        "classes": [
+            "Druid",
+            "Sorcerer",
+            "Warlock",
+            "Wizard",
+            "Artificer (Revisited)",
+            "Artificer"
+        ],
+        "damageInflict": [
+            "poison"
+        ]
+    },
+    {
+        "name": "Power Word Heal",
+        "source": "PHB",
+        "data": {
+            "Healing": "999"
+        },
+        "level": 9,
+        "classes": [
+            "Bard"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Prayer of Healing",
+        "source": "PHB",
+        "data": {
+            "Healing": "2d8",
+            "Add Casting Modifier": "Yes",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "level": 2,
+        "classes": [
+            "Cleric"
+        ],
+        "damageInflict": []
+    },
+    {
+        "name": "Prismatic Spray",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "10d6",
+            "Target": "Each creature in a 60-foot cone",
+            "Damage Type": "Fire, acid, lightning, poison, or cold",
+            "Save Success": "Half damage"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 7,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "acid",
+            "cold",
+            "fire",
+            "lightning",
+            "poison"
+        ]
+    },
+    {
+        "name": "Ray of Frost",
+        "source": "PHB",
+        "data": {
+            "Damage": "1d8",
+            "Damage Type": "Cold",
+            "Spell Attack": "Ranged",
+            "data-Cantrip Scaling": "dice"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 0,
+        "classes": [
+            "Sorcerer",
+            "Wizard",
+            "Artificer (Revisited)",
+            "Artificer"
+        ],
+        "damageInflict": [
+            "cold"
+        ]
+    },
+    {
+        "name": "Ray of Sickness",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "2d8",
+            "Damage Type": "Poison",
+            "Spell Attack": "Ranged",
+            "Save Success": "Not poisoned",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 1,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "poison"
+        ]
+    },
+    {
+        "name": "Sacred Flame",
+        "source": "PHB",
+        "data": {
+            "Save": "Dexterity",
+            "Damage": "1d8",
+            "Damage Type": "Radiant",
+            "data-Cantrip Scaling": "dice"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 0,
+        "classes": [
+            "Cleric"
+        ],
+        "damageInflict": [
+            "radiant"
+        ]
+    },
+    {
+        "name": "Scorching Ray",
+        "source": "PHB",
+        "data": {
+            "Damage": "2d6",
+            "Damage Type": "Fire",
+            "Spell Attack": "Ranged"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 2,
+        "classes": [
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "fire"
+        ]
+    },
+    {
+        "name": "Shatter",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "3d8",
+            "Target": "Each creature in a 10-foot-radius sphere centered on a point within range",
+            "Damage Type": "Thunder",
+            "Save Success": "Half damage",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 2,
+        "classes": [
+            "Bard",
+            "Sorcerer",
+            "Warlock",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "thunder"
+        ]
+    },
+    {
+        "name": "Shocking Grasp",
+        "source": "PHB",
+        "data": {
+            "Damage": "1d8",
+            "Damage Type": "Lightning",
+            "Spell Attack": "Melee",
+            "data-Cantrip Scaling": "dice"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 0,
+        "classes": [
+            "Sorcerer",
+            "Wizard",
+            "Artificer (Revisited)",
+            "Artificer"
+        ],
+        "damageInflict": [
+            "lightning"
+        ]
+    },
+    {
+        "name": "Sunburst",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "12d6",
+            "Target": "Each creature in a 60-foot radius centered on a point within range",
+            "Damage Type": "Radiant",
+            "Save Success": "Half damage and not blinded"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 8,
+        "classes": [
+            "Druid",
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "radiant"
+        ]
+    },
+    {
+        "name": "Thorn Whip",
+        "source": "PHB",
+        "data": {
+            "Damage": "1d6",
+            "Damage Type": "Piercing",
+            "data-Cantrip Scaling": "dice",
+            "Spell Attack": "Melee",
+            "Target": "A creature in range"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "attack"
+        },
+        "level": 0,
+        "classes": [
+            "Druid",
+            "Artificer (Revisited)",
+            "Artificer"
+        ],
+        "damageInflict": [
+            "piercing"
+        ]
+    },
+    {
+        "name": "Thunderwave",
+        "source": "PHB",
+        "data": {
+            "Save": "Constitution",
+            "Damage": "2d8",
+            "Target": "Each creature in a 15-foot cube originating from you",
+            "Damage Type": "Thunder",
+            "Save Success": "Half damage and not pushed",
+            "Higher Spell Slot Die": "d8",
+            "Higher Spell Slot Dice": "1"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 1,
+        "classes": [
+            "Bard",
+            "Druid",
+            "Sorcerer",
+            "Wizard"
+        ],
+        "damageInflict": [
+            "thunder"
+        ]
+    },
+    {
+        "name": "Vicious Mockery",
+        "source": "PHB",
+        "data": {
+            "Save": "Wisdom",
+            "Damage": "1d4",
+            "Damage Type": "Psychic",
+            "data-Cantrip Scaling": "dice"
+        },
+        "shapedData": {
+            "primaryDamageCondition": "save"
+        },
+        "level": 0,
+        "classes": [
+            "Bard"
+        ],
+        "damageInflict": [
+            "psychic"
+        ]
+    }
+]

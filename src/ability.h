@@ -69,3 +69,40 @@ struct Abilities
                                                    {Ability::Type::Wisdom, Ability()}}}
   {}
 };
+
+inline std::string AbilityTypeToString(Ability::Type type)
+{
+  switch (type)
+  {
+    case Ability::Type::Strength:
+      return "Strength";
+    case Ability::Type::Dexterity:
+      return "Dexterity";
+    case Ability::Type::Constitution:
+      return "Constitution";
+    case Ability::Type::Intelligence:
+      return "Intelligence";
+    case Ability::Type::Wisdom:
+      return "Wisdom";
+    case Ability::Type::Charisma:
+      return "Charisma";
+  }
+  return "None";
+}
+
+inline Ability::Type StringToAbilityType(const std::string& type)
+{
+  if (type == "Strength")
+    return Ability::Type::Strength;
+  if (type == "Dexterity")
+    return Ability::Type::Dexterity;
+  if (type == "Constitution")
+    return Ability::Type::Constitution;
+  if (type == "Intelligence")
+    return Ability::Type::Intelligence;
+  if (type == "Wisdom")
+    return Ability::Type::Wisdom;
+  if (type == "Charisma")
+    return Ability::Type::Charisma;
+  return Ability::Type::None;
+}

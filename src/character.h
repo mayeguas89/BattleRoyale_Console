@@ -13,6 +13,7 @@
 
 #include <memory>
 #include <optional>
+
 class Character
 {
 public:
@@ -31,7 +32,7 @@ public:
     state_{State::Alive},
     health_{class_->GetHitDice() + GetAbilityModifier(Ability::Type::Constitution)}
   {}
-  
+
   std::optional<Ability> GetAbility(Ability::Type type)
   {
     if (auto it = abilities_.map.find(type); it != abilities_.map.end())
@@ -55,7 +56,7 @@ public:
   }
 
   // Logica: Si el AC es menor que el que da la armadura actual no se equipa
-  void EquipWearAmor(const WearArmor& wear_armor)
+  void EquipWearAmor(std::shared_ptr<WearArmor> wear_armor)
   {
     auto dexterity_modifier = GetAbilityModifier(Ability::Type::Dexterity);
 
@@ -66,7 +67,7 @@ public:
   }
 
   // Logica: Si el AC es menor que el que da la armadura actual no se equipa
-  void EquipShield(const Shield& shield)
+  void EquipShield(std::shared_ptr<Shield> shield)
   {
     int previous_ac =
       helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity)->GetModifier(), wear_armor_, shield_);
@@ -75,7 +76,7 @@ public:
       shield_ = shield;
   }
 
-  void EquipWeapon(Weapon weapon)
+  void EquipWeapon(std::shared_ptr<Weapon> weapon)
   {
     weapon_ = weapon;
   }
@@ -174,8 +175,8 @@ public:
 protected:
   Abilities abilities_;
 
-  std::optional<WearArmor> wear_armor_;
-  std::optional<Shield> shield_;
+  std::shared_ptr<WearArmor> wear_armor_;
+  std::shared_ptr<Shield> shield_;
 
   std::unique_ptr<Race> race_;
   std::unique_ptr<Class> class_;
@@ -188,7 +189,7 @@ protected:
 
   State state_;
 
-  std::optional<Weapon> weapon_;
+  std::shared_ptr<Weapon> weapon_;
 
   std::vector<Spell> spells_;
   std::vector<Cantrip> cantrips_;

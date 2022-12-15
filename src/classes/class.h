@@ -46,3 +46,33 @@ protected:
   std::vector<AbilityType> primary_hability_;
   std::vector<AbilityType> saving_throw;
 };
+
+inline std::string TypeToString(const Class::Type& type)
+{
+  using Type = Class::Type;
+  switch (type)
+  {
+    case Type::Barbarian:
+      return "Barbarian";
+    case Type::Bard:
+      return "Bard";
+    case Type::Cleric:
+      return "Cleric";
+    case Type::Druid:
+      return "Druid";
+    case Type::Fighter:
+      return "Fighter";
+    case Type::Ranger:
+      return "Ranger";
+    case Type::Rogue:
+      return "Rogue";
+    case Type::Sorcerer:
+      return "Sorcerer";
+    case Type::Warlock:
+      return "Warlock";
+    case Type::Wizard:
+      return "Wizard";
+    default:
+      return "INVALID";
+  }
+}

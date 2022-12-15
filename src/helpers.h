@@ -3,11 +3,15 @@
 #include "armor.h"
 #include "weapon.h"
 
+#include <memory>
 #include <optional>
+
 
 namespace helpers
 {
-int GetArmorClass(int dexterity_modifier, std::optional<WearArmor> wear_armor, std::optional<Shield> shield)
+int GetArmorClass(int dexterity_modifier,
+                  const std::shared_ptr<WearArmor>& wear_armor,
+                  const std::shared_ptr<Shield>& shield)
 {
   if (!wear_armor && !shield)
     return 10 + dexterity_modifier;

@@ -6,13 +6,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
+# set(BOOST_INCLUDE_LIBRARIES algorithm)
+# set(BOOST_ENABLE_CMAKE ON)
 
-# FetchContent_Declare(tabulate
-#   GIT_REPOSITORY https://github.com/p-ranav/tabulate.git
-#   GIT_TAG v1.4
-#   GIT_PROGRESS TRUE
+# FetchContent_Declare(
+#   Boost
+#   GIT_REPOSITORY https://github.com/boostorg/boost.git
+#   GIT_TAG boost-1.81.0
 # )
-# FetchContent_MakeAvailable(tabulate)
+# FetchContent_MakeAvailable(Boost)
+
+FetchContent_Declare(tabulate
+  GIT_REPOSITORY https://github.com/p-ranav/tabulate.git
+  GIT_TAG v1.4
+  GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(tabulate)
 
 FetchContent_Declare(googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -22,6 +31,14 @@ FetchContent_Declare(googletest
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+
+FetchContent_Declare(json
+  GIT_REPOSITORY https://github.com/nlohmann/json.git
+  GIT_TAG v3.11.2
+  GIT_PROGRESS TRUE
+  )
+
+FetchContent_MakeAvailable(json)
   
 FetchContent_Declare(fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
@@ -48,9 +65,34 @@ target_link_libraries(
     battleroyalecore 
     PUBLIC 
     fmt::fmt
+    nlohmann_json::nlohmann_json
 )
 
 target_compile_features(battleroyalecore PRIVATE cxx_std_17)
+
+add_custom_command(
+        TARGET battleroyalecore POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/cfg/simpleRangedWeapons.json
+                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/simpleRangedWeapons.json)
+
+add_custom_command(
+        TARGET battleroyalecore POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/cfg/simpleMeleeWeapons.json
+                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/simpleMeleeWeapons.json)
+
+add_custom_command(
+        TARGET battleroyalecore POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/cfg/final_spells.json
+                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/final_spells.json)
+
+add_custom_command(
+        TARGET battleroyalecore POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/cfg/final_armor.json
+                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/final_armor.json)
 
 add_executable(
     battleroyale 

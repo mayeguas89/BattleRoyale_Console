@@ -1,12 +1,25 @@
 #pragma once
+#include "item.h"
 
 // https://baldursgate3.wiki.fextralife.com/Armour+Class
-class Armor
+class Armor: public Item
 {
 public:
-  Armor(int ac): ac_{ac} {}
+  Armor(const std::string& name, int ac): Item(name), ac_{ac} {}
+
+  Armor() = default;
+
+  Armor(const Armor& other): Item(other), ac_{other.ac_} {}
+
+  Armor& operator=(const Armor& other)
+  {
+    Item::operator=(other);
+    return *this;
+  };
+
   virtual ~Armor() = default;
-  int GetArmorClass()
+
+  int GetArmorClass() const
   {
     return ac_;
   }
@@ -18,15 +31,27 @@ protected:
 class Shield: public Armor
 {
 public:
-  Shield(int ac): Armor(ac) {}
+  Shield(const std::string& name, int ac): Armor(name, ac) {}
 };
 
 class WearArmor: public Armor
 {
 public:
-  WearArmor(int ac): Armor(ac) {}
+  WearArmor(const std::string& name, int ac): Armor(name, ac) {}
+
+  WearArmor() = default;
+
+  WearArmor(const WearArmor& armor): Armor(armor) {}
+
+  WearArmor& operator=(const WearArmor& other)
+  {
+    Armor::operator=(other);
+    return *this;
+  };
+
   virtual ~WearArmor() = default;
-  virtual int GetWearArmorClass(int dexterity_modifier)
+
+  virtual int GetWearArmorClass(int dexterity_modifier) const
   {
     return 0;
   };
@@ -35,8 +60,11 @@ public:
 class LightArmor: public WearArmor
 {
 public:
-  LightArmor(int ac): WearArmor(ac) {}
-  int GetWearArmorClass(int dexterity_modifier) override
+  LightArmor(const std::string& name, int ac): WearArmor(name, ac) {}
+
+  LightArmor(const LightArmor& armor): WearArmor(armor) {}
+
+  int GetWearArmorClass(int dexterity_modifier) const override
   {
     return ac_ + dexterity_modifier;
   }
@@ -45,18 +73,25 @@ public:
 class MediumArmor: public WearArmor
 {
 public:
-  MediumArmor(int ac): WearArmor(ac) {}
-  int GetWearArmorClass(int dexterity_modifier) override
+  MediumArmor(const std::string& name, int ac): WearArmor(name, ac) {}
+
+  MediumArmor(const MediumArmor& armor): WearArmor(armor) {}
+
+  int GetWearArmorClass(int dexterity_modifier) const override
   {
-    return ac_ + dexterity_modifier > 2 ? 2 : dexterity_modifier;
+    int ac_modifier = dexterity_modifier > 2 ? 2 : dexterity_modifier;
+    return ac_ + ac_modifier;
   }
 };
 
 class HeavyArmor: public WearArmor
 {
 public:
-  HeavyArmor(int ac): WearArmor(ac) {}
-  int GetWearArmorClass(int dexterity_modifier) override
+  HeavyArmor(const std::string& name, int ac): WearArmor(name, ac) {}
+
+  HeavyArmor(const HeavyArmor& armor): WearArmor(armor) {}
+
+  int GetWearArmorClass(int dexterity_modifier) const override
   {
     return ac_;
   }
