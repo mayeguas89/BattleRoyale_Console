@@ -10,7 +10,6 @@
 #include "races/race.h"
 #include "spell.h"
 #include "weapon.h"
-#include "player.h"
 
 #include <memory>
 #include <optional>

@@ -10,15 +10,6 @@
 #include <optional>
 #include <string>
 
-enum class TurnActionType
-{
-  Attack = 0,
-  CastASpell,
-  Dodge,
-  UseAnObject,
-  None
-};
-
 class Player
 {
 public:
@@ -61,12 +52,12 @@ public:
     return std::nullopt;
   }
 
-  TurnActionType DoAction()
-  {
-    // if (character_)
-    //   return character_->DoAction();
-    return TurnActionType::None;
-  }
+  // TurnActionType DoAction()
+  // {
+  //   // if (character_)
+  //   //   return character_->DoAction();
+  //   return TurnActionType::None;
+  // }
 
   bool IsAlive() const
   {
