@@ -74,14 +74,14 @@ target_compile_features(battleroyalecore PRIVATE cxx_std_17)
 add_custom_command(
         TARGET battleroyalecore POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/cfg/simpleRangedWeapons.json
-                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/simpleRangedWeapons.json)
+                ${CMAKE_SOURCE_DIR}/cfg/final_melee_weapons.json
+                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/final_melee_weapons.json)
 
 add_custom_command(
         TARGET battleroyalecore POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/cfg/simpleMeleeWeapons.json
-                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/simpleMeleeWeapons.json)
+                ${CMAKE_SOURCE_DIR}/cfg/final_ranged_weapons.json
+                ${CMAKE_CURRENT_BINARY_DIR}/Debug/cfg/final_ranged_weapons.json)
 
 add_custom_command(
         TARGET battleroyalecore POST_BUILD

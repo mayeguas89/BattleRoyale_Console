@@ -2,17 +2,33 @@
 #include "ability.h"
 #include "attack.h"
 
+#include <fmt/core.h>
+
 class Weapon: public NamedAttack
 {
 public:
-  Weapon(const std::string& name, int num_dices, int faces): NamedAttack(name, num_dices, faces) {}
+  enum class DamageType
+  {
+    Bludgeoning,
+    Slashing,
+    Piercing,
+    None
+  };
+
+  Weapon(const std::string& name, int num_dices, int faces, DamageType damageType):
+    NamedAttack(name, num_dices, faces),
+    damageType_{damageType}
+  {}
 
   Weapon() = default;
 
   virtual ~Weapon() = default;
 
   // Copy constructor
-  Weapon(const Weapon& weapon): NamedAttack(weapon) {}
+  Weapon(const Weapon& weapon): NamedAttack(weapon)
+  {
+    damageType_ = weapon.damageType_;
+  }
 
   Weapon& operator=(const Weapon& other)
   {
@@ -24,12 +40,23 @@ public:
   {
     return Ability::Type::None;
   }
+
+  DamageType GetDamageType() const
+  {
+    return damageType_;
+  }
+  friend std::ostream& operator<<(std::ostream& os, const Weapon& w);
+
+protected:
+  DamageType damageType_;
 };
 
 class MeleeWeapon: public Weapon
 {
 public:
-  MeleeWeapon(const std::string& name, int num_dices, int faces): Weapon(name, num_dices, faces) {}
+  MeleeWeapon(const std::string& name, int num_dices, int faces, DamageType damageType):
+    Weapon(name, num_dices, faces, damageType)
+  {}
   ~MeleeWeapon()
   {
     Weapon::~Weapon();
@@ -45,7 +72,9 @@ public:
 class RangedWeapon: public Weapon
 {
 public:
-  RangedWeapon(const std::string& name, int num_dices, int faces): Weapon(name, num_dices, faces) {}
+  RangedWeapon(const std::string& name, int num_dices, int faces, DamageType damageType):
+    Weapon(name, num_dices, faces, damageType)
+  {}
 
   RangedWeapon(const Weapon& weapon): Weapon(weapon) {}
   ~RangedWeapon()
@@ -55,5 +84,57 @@ public:
   Ability::Type GetAttackAbilityModifier() override
   {
     return Ability::Type::Dexterity;
+  }
+};
+
+inline Weapon::DamageType StringToDamageType(const std::string& damage_type)
+{
+  if (damage_type == "Bludgeoning")
+    return Weapon::DamageType::Bludgeoning;
+  if (damage_type == "Slashing")
+    return Weapon::DamageType::Slashing;
+  if (damage_type == "Piercing")
+    return Weapon::DamageType::Piercing;
+  return Weapon::DamageType::None;
+}
+
+inline std::string DamageTypeToString(Weapon::DamageType damage_type)
+{
+  switch (damage_type)
+  {
+    case Weapon::DamageType::Bludgeoning:
+      return "Bludgeoning";
+    case Weapon::DamageType::Slashing:
+      return "Slashing";
+    case Weapon::DamageType::Piercing:
+      return "Piercing";
+  }
+  return "UNDEFINED";
+}
+
+inline std::ostream& operator<<(std::ostream& os, const Weapon& w)
+{
+  // return os << fmt::format("Weapon: {}, Shield: {}, WearArmor: {}", *c.weapon_, *c.shield_, *c.wear_armor_);
+  // return os << fmt::format("{{Name: {}, Damage: {}d{}, DamageType: {}}}",
+  //                          w.GetName(),
+  //                          w.GetNumDices(),
+  //                          w.GetFaces(),
+  //                          DamageTypeToString(w.GetDamageType()));
+  // return os << "Name: " << w.GetName() << " damage: " <<
+}
+
+template<>
+struct fmt::formatter<Weapon>: fmt::formatter<std::string>
+{
+  template<typename FormatContext>
+  auto format(const Weapon& w, FormatContext& ctx) const
+  {
+    auto desc = fmt::format("{{Name: {}, Damage: {}d{}, DamageType: {}}}",
+                            w.GetName(),
+                            w.GetNumDices(),
+                            w.GetFaces(),
+                            DamageTypeToString(w.GetDamageType()));
+
+    return fmt::formatter<std::string>::format(desc, ctx);
   }
 };

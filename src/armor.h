@@ -1,6 +1,8 @@
 #pragma once
 #include "item.h"
 
+#include <fmt/core.h>
+
 // https://baldursgate3.wiki.fextralife.com/Armour+Class
 class Armor: public Item
 {
@@ -94,5 +96,17 @@ public:
   int GetWearArmorClass(int dexterity_modifier) const override
   {
     return ac_;
+  }
+};
+
+template<>
+struct fmt::formatter<Armor>: fmt::formatter<std::string>
+{
+  template<typename FormatContext>
+  auto format(const Armor& a, FormatContext& ctx) const
+  {
+    auto desc = fmt::format("{{Name: {}, AC: {}}}", a.GetName(), a.GetArmorClass());
+
+    return fmt::formatter<std::string>::format(desc, ctx);
   }
 };

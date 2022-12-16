@@ -24,13 +24,16 @@ public:
     {
       weapons_[ranged_weapon.GetName()] = std::make_shared<RangedWeapon>(ranged_weapon.GetName(),
                                                                          ranged_weapon.GetNumDices(),
-                                                                         ranged_weapon.GetFaces());
+                                                                         ranged_weapon.GetFaces(),
+                                                                         ranged_weapon.GetDamageType());
     }
     auto melee_weapons = Read(melee_weapon_file);
     for (const auto& melee_weapon: melee_weapons)
     {
-      weapons_[melee_weapon.GetName()] =
-        std::make_shared<MeleeWeapon>(melee_weapon.GetName(), melee_weapon.GetNumDices(), melee_weapon.GetFaces());
+      weapons_[melee_weapon.GetName()] = std::make_shared<MeleeWeapon>(melee_weapon.GetName(),
+                                                                       melee_weapon.GetNumDices(),
+                                                                       melee_weapon.GetFaces(),
+                                                                       melee_weapon.GetDamageType());
     }
   }
 
@@ -64,20 +67,31 @@ private:
 
     for (const auto& weapon: data)
     {
-      static std::regex rx{"([0-9])d([0-9]*).*"};
+      static std::regex damage{"([0-9])d([0-9]*).*"};
+      static std::regex damage_type_expr{"(Piercing|Bludgeoning|Slashing).*"};
 
       std::cmatch match;
 
       int num_dices;
       int faces;
-      std::string s = weapon.at("Damage");
-      if (std::regex_match(s.c_str(), match, rx))
+      std::string damage_text = weapon.at("Damage");
+      if (std::regex_match(damage_text.c_str(), match, damage))
       {
         num_dices = std::stoi(match[1]);
         faces = std::stoi(match[2]);
       }
 
-      weapons.emplace_back(weapon.at("Name"), num_dices, faces);
+      auto damage_type = Weapon::DamageType::None;
+      if (auto it = weapon.find("Damagetype"); it != weapon.end())
+      {
+        std::string damage_type_text = weapon.at("Damagetype");
+        if (std::regex_match(damage_type_text.c_str(), match, damage_type_expr))
+        {
+          damage_type = StringToDamageType(match[1]);
+        }
+      }
+
+      weapons.emplace_back(weapon.at("Name"), num_dices, faces, damage_type);
     }
     return weapons;
   }

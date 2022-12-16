@@ -1,14 +1,32 @@
 #include "game_manager.h"
 
 #include "fmt/format.h"
+#include "tournament.h"
 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <utility>
 
-using namespace std;
 
-GameManager& GameManager::GetInstance()
+using namespace std;
+namespace fs = std::filesystem;
+
+GameManager::GameManager(): dice6_{Dice(6)}, mode_{GameManager::GameMode::None}
+{
+  fs::path path{"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug"};
+  auto ranged_weapons = path / "cfg/final_ranged_weapons.json";
+  auto melee_weapons = path / "cfg/final_melee_weapons.json";
+  auto armor = path / "cfg/final_armor.json";
+  auto spells = path / "cfg/final_spells.json";
+  wp_db_.AddData({ranged_weapons.string(), melee_weapons.string()});
+  wear_armor_db_.AddData({armor.string()});
+  spell_db_.AddData({spells.string()});
+  std::random_device dev;
+  rng_ = std::mt19937(dev());
+}
+
+GameManager& GameManager::Get()
 {
   static GameManager instance;
   return instance;
@@ -47,15 +65,17 @@ void GameManager::SelectTurnOrder()
   std::swap(sorted_players, players_);
 }
 
-void GameManager::EnsambleMatches() {
+void GameManager::EnsambleMatches()
+{
   std::shuffle(std::begin(players_), std::end(players_), rng_);
 }
 
-
 void GameManager::StartGame()
 {
-  SelectTurnOrder();
-  is_running_ = true;
+  EnsambleMatches();
+  Tournament tournament{players_};
+  auto winner = tournament();
+  // is_running_ = true;
 }
 
 void GameManager::AddPlayer(const Player& p)
@@ -137,4 +157,71 @@ void GameManager::PrintPlayers()
 Player& GameManager::GetWinner()
 {
   return players_.at(0);
+}
+
+void GameManager::EquipCharacter(Character& character, Class::Type class_type)
+{
+  auto shield = std::make_shared<Shield>("Shield", 2);
+  switch (class_type)
+  {
+    case Class::Type::Barbarian:
+      character.EquipWeapon(wp_db_.GetDataByName("Greataxe"));
+      break;
+    case Class::Type::Bard:
+      character.EquipWeapon(wp_db_.GetDataByName("Rapier"));
+      break;
+    case Class::Type::Cleric:
+      character.EquipWeapon(wp_db_.GetDataByName("Mace"));
+      character.EquipWearAmor(wear_armor_db_.GetDataByName("Scale Mail"));
+      character.EquipShield(shield);
+      break;
+    case Class::Type::Druid:
+      character.EquipWeapon(wp_db_.GetDataByName("Scimitar"));
+      character.EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
+      character.EquipShield(shield);
+      break;
+    case Class::Type::Fighter:
+      character.EquipWeapon(wp_db_.GetDataByName("Glaive"));
+      character.EquipWearAmor(wear_armor_db_.GetDataByName("Chain Mail"));
+      break;
+    case Class::Type::Ranger:
+      character.EquipWeapon(wp_db_.GetDataByName("Barbed Dagger"));
+      character.EquipWearAmor(wear_armor_db_.GetDataByName("Scale Mail"));
+      break;
+    case Class::Type::Rogue:
+      character.EquipWeapon(wp_db_.GetDataByName("Rapier"));
+      character.EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
+      break;
+    case Class::Type::Sorcerer:
+      character.EquipWeapon(wp_db_.GetDataByName("Brandistock"));
+      break;
+    case Class::Type::Warlock:
+      character.EquipWeapon(wp_db_.GetDataByName("Brandistock"));
+      character.EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
+      break;
+    case Class::Type::Wizard:
+      character.EquipWeapon(wp_db_.GetDataByName("Dagger"));
+      break;
+  }
+
+  if (character.CanThrowSpels())
+  {
+    auto& sp_db = spell_db_.GetSpellsByLevel(1);
+    for (int i = 0; i < character.GetNumberOfSpellsSlots(); i++)
+    {
+      character.EquipSpell(sp_db.at(SingletonDice::Get().Roll(static_cast<int>(sp_db.size())) - 1));
+    }
+  }
+}
+
+std::string TypeToString(GameManager::GameMode mode)
+{
+  switch (mode)
+  {
+    case GameManager::GameMode::Manual:
+      return "Manual";
+    case GameManager::GameMode::Automatic:
+      return "Automatic";
+  }
+  return "UNDEFINED";
 }

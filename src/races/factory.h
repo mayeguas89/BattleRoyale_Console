@@ -24,22 +24,24 @@ using Subrace = std::variant<std::monostate,
                              Drow::Type,
                              Gnome::Type>;
 
+struct PrintSubraceVisitor
+{
+  std::string operator()(std::monostate) const
+  {
+    return "";
+  }
+  template<typename T>
+  std::string operator()(T val) const
+  {
+    return TypeToString(val);
+  }
+};
+
 inline std::string TypeToString(const Subrace& subrace)
 {
-  struct Visitor
-  {
-    std::string operator()(std::monostate) const
-    {
-      return "";
-    }
-    template<typename T>
-    std::string operator()(T val) const
-    {
-      return TypeToString(val);
-    }
-  };
-  return std::visit(Visitor{}, subrace);
+  return std::visit(PrintSubraceVisitor{}, subrace);
 }
+
 class DwarfFactory
 {
 public:

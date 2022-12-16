@@ -18,6 +18,24 @@
 
 using Subclass = std::variant<std::monostate, Cleric::Type, Sorcerer::Type, Warlock::Type>;
 
+struct PrintSubclassVisitor
+{
+  std::string operator()(std::monostate) const
+  {
+    return "";
+  }
+  template<typename T>
+  std::string operator()(T val) const
+  {
+    return TypeToString(val);
+  }
+};
+
+inline std::string TypeToString(const Subclass& subclass)
+{
+  return std::visit(PrintSubclassVisitor{}, subclass);
+}
+
 class ClericFactory
 {
 public:

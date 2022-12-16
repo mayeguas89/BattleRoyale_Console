@@ -12,7 +12,6 @@ namespace GameInterface
 {
 int GetNumberOfPlayers(std::istream& in)
 {
-  auto gm = GameManager::GetInstance();
   string text;
   bool go_on = true;
   int num_players;
@@ -47,60 +46,170 @@ std::string GetPlayerName(std::istream& in)
   return player_name;
 }
 
+void ManualPlayerInitialization(std::istream& in)
+{
+  std::string player_name = GetPlayerName(in);
+  fmt::print("** Seleccion de character **\n");
+
+  fmt::print("** Elige tu clase **\n");
+
+  auto class_type = SelectFromType<Class::Type>();
+
+  Subclass subclass_type = std::monostate{};
+  switch (class_type)
+  {
+    case Class::Type::Cleric:
+
+      fmt::print("** Elige tu subclase **\n");
+      subclass_type = SelectFromType<Cleric::Type>();
+      break;
+    case Class::Type::Sorcerer:
+      fmt::print("** Elige tu subclase **\n");
+      subclass_type = SelectFromType<Sorcerer::Type>();
+      break;
+    case Class::Type::Warlock:
+      fmt::print("** Elige tu subclase **\n");
+      subclass_type = SelectFromType<Warlock::Type>();
+      break;
+    default:
+      break;
+  }
+
+  fmt::print("Has elegido {} : {}\n", TypeToString(class_type), TypeToString(subclass_type));
+
+  Abilities abilities;
+  auto the_class = ClassFactory::Create(abilities, class_type, subclass_type);
+
+  fmt::print("** Elige tu raza **\n");
+  auto race_type = SelectFromType<Race::Type>();
+  Subrace subrace_type;
+  switch (race_type)
+  {
+    case Race::Type::Dwarf:
+      fmt::print("** Elige tu subraza **\n");
+      subrace_type = SelectFromType<Dwarf::Type>();
+      break;
+    case Race::Type::Drow:
+      fmt::print("** Elige tu subraza **\n");
+      subrace_type = SelectFromType<Drow::Type>();
+      break;
+    case Race::Type::Tiefling:
+      fmt::print("** Elige tu subraza **\n");
+      subrace_type = SelectFromType<Tiefling::Type>();
+      break;
+    case Race::Type::Elf:
+      fmt::print("** Elige tu subraza **\n");
+      subrace_type = SelectFromType<Elf::Type>();
+      break;
+    case Race::Type::HalfElf:
+      fmt::print("** Elige tu subraza **\n");
+      subrace_type = SelectFromType<HalfElf::Type>();
+      break;
+    case Race::Type::Halfling:
+      fmt::print("** Elige tu subraza **\n");
+      subrace_type = SelectFromType<Halfling::Type>();
+      break;
+    case Race::Type::Gnome:
+      fmt::print("** Elige tu subraza **\n");
+      subrace_type = SelectFromType<Gnome::Type>();
+      break;
+  }
+
+  fmt::print("Has elegido {} : {}\n", TypeToString(race_type), TypeToString(subrace_type));
+
+  auto race = RaceFactory::Create(abilities, race_type, subrace_type);
+  Character character(abilities, std::move(race), std::move(the_class));
+  GameManager::Get().EquipCharacter(character, class_type);
+  auto p = Player{std::make_unique<Character>(character), player_name};
+
+  GameManager::Get().AddPlayer(p);
+  fmt::print("Player {} se une al juego...\n", p);
+  std::cout << abilities << std::endl;
+}
+
+void AutomaticPlayerInitialization(int player_number)
+{
+  std::string player_name = fmt::format("Player_{}", player_number);
+  auto class_type = SelectRandomEnum<Class::Type>();
+
+  Subclass subclass_type = std::monostate{};
+  switch (class_type)
+  {
+    case Class::Type::Cleric:
+      subclass_type = SelectRandomEnum<Cleric::Type>();
+      break;
+    case Class::Type::Sorcerer:
+      subclass_type = SelectRandomEnum<Sorcerer::Type>();
+      break;
+    case Class::Type::Warlock:
+      subclass_type = SelectRandomEnum<Warlock::Type>();
+      break;
+    default:
+      break;
+  }
+  fmt::print("Has elegido {} : {}\n", TypeToString(class_type), TypeToString(subclass_type));
+
+  Abilities abilities;
+  auto the_class = ClassFactory::Create(abilities, class_type, subclass_type);
+
+  auto race_type = SelectRandomEnum<Race::Type>();
+  Subrace subrace_type;
+  switch (race_type)
+  {
+    case Race::Type::Dwarf:
+      subrace_type = SelectRandomEnum<Dwarf::Type>();
+      break;
+    case Race::Type::Drow:
+      subrace_type = SelectRandomEnum<Drow::Type>();
+      break;
+    case Race::Type::Tiefling:
+      subrace_type = SelectRandomEnum<Tiefling::Type>();
+      break;
+    case Race::Type::Elf:
+      subrace_type = SelectRandomEnum<Elf::Type>();
+      break;
+    case Race::Type::HalfElf:
+      subrace_type = SelectRandomEnum<HalfElf::Type>();
+      break;
+    case Race::Type::Halfling:
+      subrace_type = SelectRandomEnum<Halfling::Type>();
+      break;
+    case Race::Type::Gnome:
+      subrace_type = SelectRandomEnum<Gnome::Type>();
+      break;
+  }
+
+  fmt::print("Has elegido {} : {}\n", TypeToString(race_type), TypeToString(subrace_type));
+
+  auto race = RaceFactory::Create(abilities, race_type, subrace_type);
+  Character character(abilities, std::move(race), std::move(the_class));
+  GameManager::Get().EquipCharacter(character, class_type);
+  Player p{std::make_unique<Character>(character), player_name};
+
+  GameManager::Get().AddPlayer(p);
+  fmt::print("Player {} se une al juego...\n", p);
+  std::cout << abilities << std::endl;
+}
+
 void InitializePlayers(std::istream& in, int number_players)
 {
-  auto gm = GameManager::GetInstance();
   string text;
   for (int n = 0; n < number_players; n++)
   {
-    bool go_on = true;
-    std::string player_name = GetPlayerName(in);
-    fmt::print("** Seleccion de character **\n");
-
-    fmt::print("** Elige tu clase **\n");
-
-    auto class_type = SelectFromType<Class::Type>();
-
-    fmt::print("Has elegido {}\n", TypeToString(class_type));
-
-    Subclass subclass_type = std::monostate{};
-    switch (class_type)
+    if (GameManager::Get().GetMode() == GameManager::GameMode::Manual)
     {
-      case Class::Type::Cleric:
-
-        fmt::print("** Elige tu subclase **\n");
-        subclass_type = SelectFromType<Cleric::Type>();
-        fmt::print("Has elegido {}\n", TypeToString(subclass_type));
-        break;
-      case Class::Type::Sorcerer:
-        fmt::print("** Elige tu subclase **\n");
-        subclass_type = SelectFromType<Sorcerer::Type>();
-        fmt::print("Has elegido {}\n", TypeToString(subclass_type));
-        break;
-      case Class::Type::Warlock:
-        fmt::print("** Elige tu subclase **\n");
-        subclass_type = SelectFromType<Warlock::Type>();
-        fmt::print("Has elegido {}\n", TypeToString(subclass_type));
-        break;
-      default:
-        break;
+      ManualPlayerInitialization(in);
     }
-
-    Abilities abilities;
-    auto the_class = ClassFactory::Create(abilities, class_type, subclass_type);
-
-    fmt::print("** Elige tu raza **\n");
-    auto race_type = SelectFromType<Race::Type>();
-    Subrace subrace_type = std::monostate{};
-    fmt::print("** Elige tu subraza **\n");
-    auto race = RaceFactory::Create(abilities, race_type, subrace_type);
-
-    auto character = std::make_unique<Character>(abilities, std::move(race), std::move(the_class));
-
-    auto p = Player{std::move(character), player_name};
-    gm.AddPlayer(p);
-    fmt::print("Player {} se une al juego...\n", p);
-    std::cout << abilities;
+    else
+    {
+      AutomaticPlayerInitialization(n);
+    }
   }
+}
+
+void SelectMode()
+{
+  auto mode = SelectFromType<GameManager::GameMode>();
+  GameManager::Get().SetMode(mode);
 }
 }

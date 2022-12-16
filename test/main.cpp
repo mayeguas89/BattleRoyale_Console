@@ -17,33 +17,31 @@ TEST(Dice, Simple)
 
 TEST(GameManager, NumberOfPlayersIsNotBiggerThanMaximumAllowed)
 {
-  auto gm = GameManager::GetInstance();
   for (int i = 0; i <= GameManager::kMaxNumPlayers; i++)
   {
-    gm.AddPlayer(Player());
+    GameManager::Get().AddPlayer(Player());
   }
-  ASSERT_THAT(gm.GetPlayers(), SizeIs(GameManager::kMaxNumPlayers));
+  ASSERT_THAT(GameManager::Get().GetPlayers(), SizeIs(GameManager::kMaxNumPlayers));
 }
 
-void AddPlayersToGM(GameManager& gm, int number_of_players)
+void AddPlayersToGM(int number_of_players)
 {
   for (int i = 0; i < number_of_players; i++)
   {
-    gm.AddPlayer(Player());
+    GameManager::Get().AddPlayer(Player());
   }
 }
 
 struct TournamentTest: Test
 {
-  GameManager& gm = GameManager::GetInstance();
 };
 
 TEST_F(TournamentTest, TournamentOneParticipantGiveOnlyPlayerAsWinner)
 {
-  gm.ClearPlayers();
-  AddPlayersToGM(gm, 1);
+  GameManager::Get().ClearPlayers();
+  AddPlayersToGM(1);
 
-  Tournament t(gm.GetPlayers());
+  Tournament t(GameManager::Get().GetPlayers());
   auto& winner = t();
   ASSERT_EQ(winner.GetName(), "0");
   fmt::print("Player {} has win!\n", winner.GetName());
@@ -51,10 +49,10 @@ TEST_F(TournamentTest, TournamentOneParticipantGiveOnlyPlayerAsWinner)
 
 TEST_F(TournamentTest, TournamentOddParticipant)
 {
-  gm.ClearPlayers();
-  AddPlayersToGM(gm, 3);
+  GameManager::Get().ClearPlayers();
+  AddPlayersToGM(3);
 
-  Tournament t(gm.GetPlayers());
+  Tournament t(GameManager::Get().GetPlayers());
   auto& winner = t();
   ASSERT_EQ(winner.GetName(), "0");
   fmt::print("Player {} has win!\n", winner.GetName());
@@ -62,11 +60,11 @@ TEST_F(TournamentTest, TournamentOddParticipant)
 
 TEST_F(TournamentTest, TournamentEvenParticipant)
 {
-  gm.ClearPlayers();
+  GameManager::Get().ClearPlayers();
   int participants = 4;
-  AddPlayersToGM(gm, participants);
+  AddPlayersToGM(participants);
 
-  Tournament t(gm.GetPlayers());
+  Tournament t(GameManager::Get().GetPlayers());
   auto& winner = t();
   ASSERT_EQ(winner.GetName(), "0");
   fmt::print("Player {} has win!\n", winner.GetName());
@@ -74,11 +72,11 @@ TEST_F(TournamentTest, TournamentEvenParticipant)
 
 TEST_F(TournamentTest, TournamentEvenNotPowerOf2)
 {
-  gm.ClearPlayers();
+  GameManager::Get().ClearPlayers();
   int participants = 6;
-  AddPlayersToGM(gm, participants);
+  AddPlayersToGM(participants);
 
-  Tournament t(gm.GetPlayers());
+  Tournament t(GameManager::Get().GetPlayers());
   auto& winner = t();
   ASSERT_EQ(winner.GetName(), "0");
   fmt::print("Player {} has win!\n", winner.GetName());
@@ -86,11 +84,11 @@ TEST_F(TournamentTest, TournamentEvenNotPowerOf2)
 
 TEST_F(TournamentTest, TournamentEvenNotPowerOf2Two)
 {
-  gm.ClearPlayers();
+  GameManager::Get().ClearPlayers();
   int participants = 12;
-  AddPlayersToGM(gm, participants);
+  AddPlayersToGM(participants);
 
-  Tournament t(gm.GetPlayers());
+  Tournament t(GameManager::Get().GetPlayers());
   auto& winner = t();
   ASSERT_EQ(winner.GetName(), "0");
   fmt::print("Player {} has win!\n", winner.GetName());
@@ -98,27 +96,26 @@ TEST_F(TournamentTest, TournamentEvenNotPowerOf2Two)
 
 struct GameManagerTest: Test
 {
-  GameManager& gm = GameManager::GetInstance();
   GameManagerTest()
   {
     // for (int i = 0; i < GameManager::kMaxNumPlayers; i++)
     for (int i = 0; i < 5; i++)
     {
-      gm.AddPlayer(Player());
+      GameManager::Get().AddPlayer(Player());
     }
   }
 };
 
 TEST_F(GameManagerTest, PlayRound)
 {
-  gm.StartGame();
-  while (gm.IsRunning())
+  GameManager::Get().StartGame();
+  while (GameManager::Get().IsRunning())
   {
-    gm.PlayRound();
+    GameManager::Get().PlayRound();
   }
 
   fmt::print("\n** Combat has finished **\n");
-  auto& p = gm.GetWinner();
+  auto& p = GameManager::Get().GetWinner();
 
   fmt::print("Player {} has win!\n", p.GetName());
 }
@@ -277,7 +274,7 @@ TEST(ActionTest, CastSpell)
                                        Class::Type::Wizard,
                                        std::monostate{});
 
-  Spell spell{"Arms of Hadar", 2, 6, 1, Ability::Type::Strength};
+  Spell spell{"Arms of Hadar", 2, 6, 1, Ability::Type::Strength, {Spell::DamageInflict::None}};
   auto attack = CastSpell{character_one, character_two, spell};
   attack();
 }
@@ -364,4 +361,50 @@ TEST(CharacterAssignWeaponAndArmors, Simple)
   ASSERT_EQ(character.GetAttackModifier(), ability_modifier);
   // Va con el dado por lo que no se puede saber
   // ASSERT_EQ(character.RollDamage(), character.GetAttackModifier() + ability_modifier);
+}
+
+#include "tournament.h"
+#include "interface.h"
+
+struct MatchTest: Test
+{
+  Character character_one{CreateCharacter(Race::Type::Drow,
+                                          Drow::Type::LolthSwornDrow,
+                                          Class::Type::Warlock,
+                                          Warlock::Type::TheFiendWarlock)};
+
+  Character character_two{CreateCharacter(Race::Type::Halfling,
+                                          Halfling::Type::StrongheartHalfling,
+                                          Class::Type::Wizard,
+                                          std::monostate{})};
+  MatchTest()
+  {
+    SpellDataBase spell_db;
+    spell_db.AddData(
+      {"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
+       "final_spells.json"});
+
+    auto spells = spell_db.GetSpellsByLevel(1);
+    // for (const auto& spell: spell_db.GetSpellsByLevel(1))
+    // {
+    //   std::cout << spell->GetName() << std::endl;
+    // }
+
+    typedef std::vector<std::shared_ptr<Spell>>::iterator Iterator;
+    auto selected_spell = GameInterface::SelectFromContainer<Iterator>(spells.begin(), spells.end());
+   
+    std::cout << (*selected_spell)->GetName() << std::endl;
+    // auto inflinct_wounds = spell_db.GetDataByName("Inflict Wounds");
+    // auto inflinct_wounds = spell_db.GetDataByName("Inflict Wounds");
+    // ASSERT_TRUE(inflinct_wounds);
+    // ASSERT_EQ(inflinct_wounds->GetFaces(), 10);
+    // ASSERT_EQ(inflinct_wounds->GetNumDices(), 3);
+  }
+};
+
+TEST_F(MatchTest, Match)
+{
+  // character_one.Player player_one(std::make_unique<Character>(character_one));
+  // Player player_two(std::make_unique<Character>(character_two));
+  // auto match = Match(std::make_pair(player_one, player_two));
 }

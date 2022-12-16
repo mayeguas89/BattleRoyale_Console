@@ -39,13 +39,14 @@ int main(int, char**)
 
   // std::cout << weapon_table << std::endl;
 
-  auto gm = GameManager::GetInstance();
   std::cout << "Vamos a empezar el juego!\n";
   auto num_players = GameInterface::GetNumberOfPlayers(std::cin);
+  GameInterface::SelectMode();
+
   GameInterface::InitializePlayers(std::cin, num_players);
-  gm.StartGame();
-  while (gm.IsRunning())
-  {
-    gm.PlayRound();
-  }
+  GameManager::Get().StartGame();
+  // while (GameManager::Get().IsRunning())
+  // {
+  //   GameManager::Get().PlayRound();
+  // }
 }

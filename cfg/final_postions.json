@@ -1,0 +1,191 @@
+[
+    {
+        "name": "Potion of Acid Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "acid"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Cold Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "cold"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Fire Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "fire"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Force Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "force"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Invulnerability",
+        "source": "DMG",
+        "page": 188,
+        "type": "P",
+        "resist": [
+            "acid",
+            "bludgeoning",
+            "cold",
+            "fire",
+            "force",
+            "lightning",
+            "necrotic",
+            "piercing",
+            "poison",
+            "psychic",
+            "radiant",
+            "slashing",
+            "thunder"
+        ],
+        "tier": "minor",
+        "rarity": "rare",
+        "entries": [
+            "For 1 minute after you drink this potion, you have resistance to all damage. The potion's syrupy liquid looks like liquefied iron."
+        ],
+        "lootTables": [
+            "Magic Item Table C"
+        ]
+    },
+    {
+        "name": "Potion of Lightning Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "lightning"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Necrotic Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "necrotic"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Poison Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "poison"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Psychic Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "psychic"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Radiant Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "radiant"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    },
+    {
+        "name": "Potion of Thunder Resistance",
+        "source": "DMG",
+        "page": 188,
+        "srd": true,
+        "type": "P",
+        "resist": [
+            "thunder"
+        ],
+        "tier": "minor",
+        "rarity": "uncommon",
+        "hasRefs": true,
+        "entries": [
+            "{#itemEntry Potion of Resistance}"
+        ]
+    }
+]

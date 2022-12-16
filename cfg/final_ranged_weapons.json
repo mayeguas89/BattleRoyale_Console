@@ -1,0 +1,173 @@
+[
+    {
+        "Name": "Atlatl",
+        "Cost": "5 gp",
+        "Damage": "1d6",
+        "Weight": "1 lb",
+        "Properties": [
+            "Ammunition",
+            "Range (50-100)",
+            "Special"
+        ],
+        "Damagetype": "Piercing"
+    },
+    {
+        "Name": "Bolas",
+        "Cost": "1 gp",
+        "Damage": "1d4",
+        "Weight": "2 lb",
+        "Properties": [
+            "Special",
+            "Thrown (20/60)"
+        ],
+        "Damagetype": "Bludgeoning"
+    },
+    {
+        "Name": "Boomerang",
+        "Cost": "2 gp",
+        "Damage": "1d4",
+        "Weight": "1 lb",
+        "Properties": [
+            "Special",
+            "Thrown (20/60)"
+        ],
+        "Damagetype": "Bludgeoning"
+    },
+    {
+        "Name": "Chakram",
+        "Cost": "5 gp",
+        "Damage": "1d6",
+        "Weight": "0.5 lb",
+        "Properties": [
+            "Finesse",
+            "Thrown (20/60)"
+        ],
+        "Damagetype": "Slashing"
+    },
+    {
+        "Name": "Chatkcha",
+        "Cost": "1 gp",
+        "Damage": "1d6",
+        "Weight": "2 lb",
+        "Properties": [
+            "Finesse",
+            "Light",
+            "Thrown (30/120)",
+            "Special"
+        ],
+        "Damagetype": "Slashing"
+    },
+    {
+        "Name": "Crossbow, Hand",
+        "Cost": "75 gp",
+        "Damage": "1d6",
+        "Weight": "3 lb",
+        "Properties": [
+            "Ammunition",
+            "Range (30/120)",
+            "Light",
+            "Loading"
+        ],
+        "Damagetype": "Piercing"
+    },
+    {
+        "Name": "Crossbow, Heavy",
+        "Cost": "50 gp",
+        "Damage": "1d10",
+        "Weight": "18 lb",
+        "Properties": [
+            "Ammunition",
+            "Range (100/400)",
+            "Heavy",
+            "Loading",
+            "Two-Handed"
+        ],
+        "Damagetype": "Piercing"
+    },
+    {
+        "Name": "Crossbow, Repeating",
+        "Cost": "250 gp",
+        "Damage": "2d4",
+        "Weight": "18 lb",
+        "Properties": [
+            "Ammunition",
+            "Range (80/320)",
+            "Heavy",
+            "Two-Handed"
+        ],
+        "Damagetype": "Piercing"
+    },
+    {
+        "Name": "Longbow",
+        "Cost": "50 gp",
+        "Damage": "1d8",
+        "Weight": "2 lb",
+        "Properties": [
+            "Ammunition",
+            "Range (150/600)",
+            "Heavy",
+            "Two-Handed"
+        ],
+        "Damagetype": "Piercing"
+    },
+    {
+        "Name": "Throwing Hammer",
+        "Cost": "15 gp",
+        "Damage": "1d6",
+        "Weight": "4 lb",
+        "Properties": [
+            "Thrown (60/120)"
+        ],
+        "Damagetype": "Bludgeoning"
+    },
+    {
+        "Name": "Crossbow, light",
+        "Cost": "25 gp",
+        "Damage": "1d8 piercing",
+        "Weight": "5 lb",
+        "Properties": [
+            "Ammunition (80/320)",
+            "Loading",
+            "Two-Handed"
+        ]
+    },
+    {
+        "Name": "Dart",
+        "Cost": "5 cp",
+        "Damage": "1d4 piercing",
+        "Weight": "0.25 lb",
+        "Properties": [
+            "Finesse",
+            "Thrown (20/60)"
+        ]
+    },
+    {
+        "Name": "Shortbow",
+        "Cost": "25 gp",
+        "Damage": "1d6 piercing",
+        "Weight": "2 lb",
+        "Properties": [
+            "Ammunition (80/320)",
+            "Two-handed"
+        ]
+    },
+    {
+        "Name": "Sling",
+        "Cost": "1 sp",
+        "Damage": "1d4 bludgeoning",
+        "Weight": "",
+        "Properties": [
+            "Ammunition (30/120)"
+        ]
+    },
+    {
+        "Name": "Slingstaff",
+        "Cost": "2 sp",
+        "Damage": "1d6 bludgeoning",
+        "Weight": "2 lb",
+        "Properties": [
+            "Ammunition (30/120)",
+            "Two-handed"
+        ]
+    }
+]

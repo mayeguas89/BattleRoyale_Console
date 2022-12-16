@@ -23,14 +23,14 @@ public:
     }
   }
 
-  std::vector<std::shared_ptr<Spell>> GetData()
+  std::vector<std::shared_ptr<Spell>> GetData() override
   {
     std::vector<std::shared_ptr<Spell>> v;
     std::transform(spells_.begin(), spells_.end(), std::back_inserter(v), [](auto& item) { return item.second; });
     return v;
   }
 
-  std::shared_ptr<Spell> GetDataByName(const std::string& name)
+  std::shared_ptr<Spell> GetDataByName(const std::string& name) override
   {
     if (auto it = spells_.find(name); it != spells_.end())
     {
@@ -39,9 +39,20 @@ public:
     return nullptr;
   }
 
+  std::vector<std::shared_ptr<Spell>> GetSpellsByLevel(int level)
+  {
+    auto data = GetData();
+    std::vector<std::shared_ptr<Spell>> v;
+    std::copy_if(data.begin(),
+                 data.end(),
+                 std::back_inserter(v),
+                 [level](auto& item) { return item->GetLevel() == level; });
+    return v;
+  }
+
 private:
   std::unordered_map<std::string, std::shared_ptr<Spell>> spells_;
-  
+
   std::vector<Spell> Read(const std::string& json_file)
   {
     std::vector<Spell> spells;
@@ -69,6 +80,12 @@ private:
         s = spell.at("data").at("Damage");
       }
 
+      std::vector<Spell::DamageInflict> damage_inflict;
+      for (auto& damageInflinct: spell.at("damageInflict"))
+      {
+        damage_inflict.push_back(StringToDamageInflict(damageInflinct));
+      }
+
       if (std::regex_match(s.c_str(), match, rx))
       {
         num_dices = std::stoi(match[1]);
@@ -79,7 +96,7 @@ private:
         if (auto it = spell.at("data").find("Save"); it != spell.at("data").end())
           saving_throw = StringToAbilityType(spell.at("data").at("Save"));
 
-        spells.emplace_back(spell.at("name"), num_dices, faces, level, saving_throw, effect_type);
+        spells.emplace_back(spell.at("name"), num_dices, faces, level, saving_throw, damage_inflict, effect_type);
       }
     }
     return spells;
