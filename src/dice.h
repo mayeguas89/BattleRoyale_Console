@@ -33,6 +33,9 @@ public:
     auto dist = std::uniform_int_distribution<std::mt19937::result_type>(1, faces);
     return dist(rng_);
   }
+  
+  SingletonDice(SingletonDice const&) = delete;
+  void operator=(SingletonDice const&) = delete;
 
 private:
   SingletonDice()
@@ -41,4 +44,5 @@ private:
     rng_ = std::mt19937(dev());
   }
   std::mt19937 rng_;
+  
 };

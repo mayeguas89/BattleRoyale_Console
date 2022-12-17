@@ -1,7 +1,8 @@
 #pragma once
+
 #include "item.h"
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 // https://baldursgate3.wiki.fextralife.com/Armour+Class
 class Armor: public Item
@@ -26,9 +27,16 @@ public:
     return ac_;
   }
 
+  friend std::ostream& operator<<(std::ostream& os, const Armor& a);
+
 protected:
   int ac_;
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Armor& a)
+{
+  return os << fmt::format("{{Name: {}, AC: {}}}", a.GetName(), a.GetArmorClass()) << std::endl;
+}
 
 class Shield: public Armor
 {
@@ -100,10 +108,22 @@ public:
 };
 
 template<>
-struct fmt::formatter<Armor>: fmt::formatter<std::string>
+struct fmt::formatter<WearArmor>: fmt::formatter<std::string>
 {
   template<typename FormatContext>
-  auto format(const Armor& a, FormatContext& ctx) const
+  auto format(const WearArmor& a, FormatContext& ctx) const
+  {
+    auto desc = fmt::format("{{Name: {}, AC: {}}}", a.GetName(), a.GetArmorClass());
+
+    return fmt::formatter<std::string>::format(desc, ctx);
+  }
+};
+
+template<>
+struct fmt::formatter<Shield>: fmt::formatter<std::string>
+{
+  template<typename FormatContext>
+  auto format(const Shield& a, FormatContext& ctx) const
   {
     auto desc = fmt::format("{{Name: {}, AC: {}}}", a.GetName(), a.GetArmorClass());
 

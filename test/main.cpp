@@ -275,7 +275,7 @@ TEST(ActionTest, CastSpell)
                                        std::monostate{});
 
   Spell spell{"Arms of Hadar", 2, 6, 1, Ability::Type::Strength, {Spell::DamageInflict::None}};
-  auto attack = CastSpell{character_one, character_two, spell};
+  auto attack = CastSpell{&character_one, &character_two, &spell};
   attack();
 }
 

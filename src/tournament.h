@@ -1,7 +1,6 @@
 #pragma once
 
 #include "player.h"
-
 #include <functional>
 #include <memory>
 #include <optional>
@@ -15,17 +14,19 @@ class Tournament
   class Match
   {
   public:
-    Match(std::pair<Player, Player> players);
+    Match(std::pair<Player*, Player*> players);
 
-    Player operator()();
+    void DoTurn(Player* performer, Player* target);
+
+    Player* operator()();
 
   private:
-    Player player_one_;
-    Player player_two_;
+    Player* player_one_;
+    Player* player_two_;
   };
 
 public:
-  Tournament(std::vector<Player>& players);
+  Tournament(const std::vector<Player>& players);
   Player operator()();
 
 private:

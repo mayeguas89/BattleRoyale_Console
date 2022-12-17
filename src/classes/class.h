@@ -24,7 +24,9 @@ public:
     None
   };
 
-  Class(Abilities& abilities, int hit_dice, int hit_die_per_level)
+  Class(Abilities& abilities, int hit_dice, int hit_die_per_level):
+    hit_dice_{hit_dice},
+    hit_die_per_level_{hit_die_per_level}
   {
     instances_counter_++;
   }

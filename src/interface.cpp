@@ -118,12 +118,14 @@ void ManualPlayerInitialization(std::istream& in)
   fmt::print("Has elegido {} : {}\n", TypeToString(race_type), TypeToString(subrace_type));
 
   auto race = RaceFactory::Create(abilities, race_type, subrace_type);
-  Character character(abilities, std::move(race), std::move(the_class));
-  GameManager::Get().EquipCharacter(character, class_type);
-  auto p = Player{std::make_unique<Character>(character), player_name};
+  auto character = std::make_unique<Character>(abilities, std::move(race), std::move(the_class));
+  GameManager::Get().EquipCharacter(character.get(), class_type);
+  auto player = std::make_unique<Player>(std::move(character), player_name);
 
-  GameManager::Get().AddPlayer(p);
-  fmt::print("Player {} se une al juego...\n", p);
+  std::cout << "Player " << *player.get() << std::endl;
+  std::cout << " se une al juego...\n\n";
+  player->PrintStats();
+  GameManager::Get().AddPlayer(*player.get());
   std::cout << abilities << std::endl;
 }
 
@@ -182,12 +184,13 @@ void AutomaticPlayerInitialization(int player_number)
   fmt::print("Has elegido {} : {}\n", TypeToString(race_type), TypeToString(subrace_type));
 
   auto race = RaceFactory::Create(abilities, race_type, subrace_type);
-  Character character(abilities, std::move(race), std::move(the_class));
-  GameManager::Get().EquipCharacter(character, class_type);
-  Player p{std::make_unique<Character>(character), player_name};
+  auto character = std::make_unique<Character>(abilities, std::move(race), std::move(the_class));
+  GameManager::Get().EquipCharacter(character.get(), class_type);
+  auto player = std::make_unique<Player>(std::move(character), player_name);
 
-  GameManager::Get().AddPlayer(p);
-  fmt::print("Player {} se une al juego...\n", p);
+  std::cout << "Player " << *player.get() << " se une al juego...\n\n";
+  player->PrintStats();
+  GameManager::Get().AddPlayer(*player.get());
   std::cout << abilities << std::endl;
 }
 

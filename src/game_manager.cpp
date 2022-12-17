@@ -159,57 +159,57 @@ Player& GameManager::GetWinner()
   return players_.at(0);
 }
 
-void GameManager::EquipCharacter(Character& character, Class::Type class_type)
+void GameManager::EquipCharacter(Character* character, Class::Type class_type)
 {
   auto shield = std::make_shared<Shield>("Shield", 2);
   switch (class_type)
   {
     case Class::Type::Barbarian:
-      character.EquipWeapon(wp_db_.GetDataByName("Greataxe"));
+      character->EquipWeapon(wp_db_.GetDataByName("Greataxe"));
       break;
     case Class::Type::Bard:
-      character.EquipWeapon(wp_db_.GetDataByName("Rapier"));
+      character->EquipWeapon(wp_db_.GetDataByName("Rapier"));
       break;
     case Class::Type::Cleric:
-      character.EquipWeapon(wp_db_.GetDataByName("Mace"));
-      character.EquipWearAmor(wear_armor_db_.GetDataByName("Scale Mail"));
-      character.EquipShield(shield);
+      character->EquipWeapon(wp_db_.GetDataByName("Mace"));
+      character->EquipWearAmor(wear_armor_db_.GetDataByName("Scale Mail"));
+      character->EquipShield(shield);
       break;
     case Class::Type::Druid:
-      character.EquipWeapon(wp_db_.GetDataByName("Scimitar"));
-      character.EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
-      character.EquipShield(shield);
+      character->EquipWeapon(wp_db_.GetDataByName("Scimitar"));
+      character->EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
+      character->EquipShield(shield);
       break;
     case Class::Type::Fighter:
-      character.EquipWeapon(wp_db_.GetDataByName("Glaive"));
-      character.EquipWearAmor(wear_armor_db_.GetDataByName("Chain Mail"));
+      character->EquipWeapon(wp_db_.GetDataByName("Glaive"));
+      character->EquipWearAmor(wear_armor_db_.GetDataByName("Chain Mail"));
       break;
     case Class::Type::Ranger:
-      character.EquipWeapon(wp_db_.GetDataByName("Barbed Dagger"));
-      character.EquipWearAmor(wear_armor_db_.GetDataByName("Scale Mail"));
+      character->EquipWeapon(wp_db_.GetDataByName("Barbed Dagger"));
+      character->EquipWearAmor(wear_armor_db_.GetDataByName("Scale Mail"));
       break;
     case Class::Type::Rogue:
-      character.EquipWeapon(wp_db_.GetDataByName("Rapier"));
-      character.EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
+      character->EquipWeapon(wp_db_.GetDataByName("Rapier"));
+      character->EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
       break;
     case Class::Type::Sorcerer:
-      character.EquipWeapon(wp_db_.GetDataByName("Brandistock"));
+      character->EquipWeapon(wp_db_.GetDataByName("Brandistock"));
       break;
     case Class::Type::Warlock:
-      character.EquipWeapon(wp_db_.GetDataByName("Brandistock"));
-      character.EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
+      character->EquipWeapon(wp_db_.GetDataByName("Brandistock"));
+      character->EquipWearAmor(wear_armor_db_.GetDataByName("Leather Armor"));
       break;
     case Class::Type::Wizard:
-      character.EquipWeapon(wp_db_.GetDataByName("Dagger"));
+      character->EquipWeapon(wp_db_.GetDataByName("Dagger"));
       break;
   }
 
-  if (character.CanThrowSpels())
+  if (character->CanThrowSpels())
   {
     auto& sp_db = spell_db_.GetSpellsByLevel(1);
-    for (int i = 0; i < character.GetNumberOfSpellsSlots(); i++)
+    for (int i = 0; i < character->GetNumberOfSpellsSlots(); i++)
     {
-      character.EquipSpell(sp_db.at(SingletonDice::Get().Roll(static_cast<int>(sp_db.size())) - 1));
+      character->EquipSpell(sp_db.at(SingletonDice::Get().Roll(static_cast<int>(sp_db.size())) - 1));
     }
   }
 }

@@ -53,6 +53,8 @@ add_library(
     src/interface.cpp
     src/player.cpp
     src/tournament.cpp
+    src/character.cpp
+    src/turn_action.cpp
 )
 
 target_include_directories(

@@ -76,7 +76,7 @@ public:
   void AddPlayer(const Player& player);
   void PlayRound();
   Player& GetWinner();
-  void EquipCharacter(Character& character, Class::Type class_type);
+  void EquipCharacter(Character* character, Class::Type class_type);
   void PrintPlayers();
   void ClearPlayers()
   {

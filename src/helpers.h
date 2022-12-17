@@ -1,5 +1,5 @@
 #pragma once
-#include "ability.h"
+
 #include "armor.h"
 #include "weapon.h"
 
