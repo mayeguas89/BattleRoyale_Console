@@ -55,6 +55,7 @@ add_library(
     src/tournament.cpp
     src/character.cpp
     src/turn_action.cpp
+    src/ability.cpp
 )
 
 target_include_directories(
@@ -110,7 +111,6 @@ target_link_libraries(
 
 target_compile_features(battleroyale PRIVATE cxx_std_17)
 
-
 add_executable(
     battleroyaleTest
     test/main.cpp
@@ -124,9 +124,3 @@ target_link_libraries(
     gmock
     gmock_main
 )
-
-# target_include_directories(MyProject PRIVATE "C:/Repos/fmt/include")
-
-# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-# include(CPack)

@@ -122,10 +122,9 @@ void ManualPlayerInitialization(std::istream& in)
   GameManager::Get().EquipCharacter(character.get(), class_type);
   auto player = std::make_unique<Player>(std::move(character), player_name);
 
-  std::cout << "Player " << *player.get() << std::endl;
+  std::cout << "Created player " << *player.get() << std::endl;
   std::cout << " se une al juego...\n\n";
-  player->PrintStats();
-  GameManager::Get().AddPlayer(*player.get());
+  GameManager::Get().AddPlayer(std::move(player));
   std::cout << abilities << std::endl;
 }
 
@@ -188,9 +187,9 @@ void AutomaticPlayerInitialization(int player_number)
   GameManager::Get().EquipCharacter(character.get(), class_type);
   auto player = std::make_unique<Player>(std::move(character), player_name);
 
-  std::cout << "Player " << *player.get() << " se une al juego...\n\n";
-  player->PrintStats();
-  GameManager::Get().AddPlayer(*player.get());
+  std::cout << "Created player " << *player.get() << std::endl;
+  std::cout << " se une al juego...\n\n";
+  GameManager::Get().AddPlayer(std::move(player));
   std::cout << abilities << std::endl;
 }
 
@@ -212,6 +211,7 @@ void InitializePlayers(std::istream& in, int number_players)
 
 void SelectMode()
 {
+  std::cout << "\n\n";
   auto mode = SelectFromType<GameManager::GameMode>();
   GameManager::Get().SetMode(mode);
 }

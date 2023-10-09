@@ -30,19 +30,13 @@ public:
   };
 
   static const int kMinNumPlayers = 1;
-  static const int kMaxNumPlayers = 41;
+  static const int kMaxNumPlayers = 100;
 
   static GameManager& Get();
 
-  void SelectTurnOrder();
-  void EnsambleMatches();
+  bool ReadDB();
 
   void StartGame();
-
-  std::vector<Player> GetPlayers()
-  {
-    return players_;
-  }
 
   bool IsRunning()
   {
@@ -53,6 +47,7 @@ public:
   {
     return wp_db_;
   }
+
   SpellDataBase& GetSpellDB()
   {
     return spell_db_;
@@ -73,26 +68,24 @@ public:
     return mode_;
   }
 
-  void AddPlayer(const Player& player);
-  void PlayRound();
+  void AddPlayer(std::unique_ptr<Player>);
+
   Player& GetWinner();
+
   void EquipCharacter(Character* character, Class::Type class_type);
-  void PrintPlayers();
-  void ClearPlayers()
-  {
-    players_.clear();
-  }
 
   GameManager(GameManager const&) = delete;
+
   void operator=(GameManager const&) = delete;
 
 private:
   GameManager();
   int GetPlayersAlive();
-  std::vector<Player> players_;
+  std::vector<std::unique_ptr<Player>> players_;
   bool is_running_ = false;
   Dice dice6_;
   std::mt19937 rng_;
+  Player winner_;
 
   WeaponDataBase wp_db_;
   SpellDataBase spell_db_;

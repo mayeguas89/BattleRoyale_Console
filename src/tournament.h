@@ -1,6 +1,9 @@
 #pragma once
 
 #include "player.h"
+
+#include <tabulate/table.hpp>
+
 #include <functional>
 #include <memory>
 #include <optional>
@@ -9,6 +12,8 @@
 #include <utility>
 #include <vector>
 
+using namespace tabulate;
+
 class Tournament
 {
   class Match
@@ -16,7 +21,7 @@ class Tournament
   public:
     Match(std::pair<Player*, Player*> players);
 
-    void DoTurn(Player* performer, Player* target);
+    void DoTurn(Player* performer, Player* target, Table& round_table);
 
     Player* operator()();
 
@@ -26,12 +31,17 @@ class Tournament
   };
 
 public:
-  Tournament(const std::vector<Player>& players);
+  Tournament(const std::vector<std::unique_ptr<Player>>& players);
   Player operator()();
 
 private:
+  void InitTable(int number_of_rounds, const std::vector<Player *>& players_copy);
+  void CreateMatchesQueue(const std::vector<Player *>& players_copy);
+  void PrintTournamentTable();
   std::queue<Match> matches_;
 
   Player winner_;
   std::mt19937 rng_;
+
+  Table tournament_table_;
 };

@@ -23,18 +23,22 @@ public:
   };
   DeathSavingThrow() {}
 
-  Result operator()()
+  Result operator()(int roll = -1)
   {
     // On your third success, you become stable (see
     // below). On your third failure, you die
-    int roll = SingletonDice::Get().Roll(20);
+    if (roll == -1)
+      roll = SingletonDice::Get().Roll(20);
+
     if (roll == 1)
       failure_counter_ += 2;
-
-    if (roll > 10)
-      success_counter_++;
     else
-      failure_counter_++;
+    {
+      if (roll > 10)
+        success_counter_++;
+      else
+        failure_counter_++;
+    }
 
     return Result{success_counter_, failure_counter_, roll == 20};
   }

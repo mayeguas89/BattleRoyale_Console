@@ -1,4 +1,5 @@
 #pragma once
+#include "ability.h"
 #include "race.h"
 
 class Halfling: public Race
@@ -6,7 +7,7 @@ class Halfling: public Race
 public:
   enum class Type
   {
-    LightfootHalfling=0,
+    LightfootHalfling = 0,
     StrongheartHalfling,
     None
   };
@@ -24,7 +25,7 @@ public:
   };
   Halfling(Abilities& abilities): Race(abilities)
   {
-    abilities.map[AbilityType::Dexterity] += 2;
+    abilities.AddToAbility(AbilityType::Dexterity, 2);
   }
 };
 
@@ -47,7 +48,7 @@ class LightfootHalfling: public Halfling
 public:
   LightfootHalfling(Abilities& abilities): Halfling(abilities)
   {
-    abilities.map[AbilityType::Charisma] += 1;
+    abilities.AddToAbility(AbilityType::Charisma, 1);
   }
 };
 
@@ -56,6 +57,6 @@ class StrongheartHalfling: public Halfling
 public:
   StrongheartHalfling(Abilities& abilities): Halfling(abilities)
   {
-    abilities.map[AbilityType::Constitution] += 1;
+    abilities.AddToAbility(AbilityType::Constitution, 1);
   }
 };

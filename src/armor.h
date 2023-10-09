@@ -4,7 +4,6 @@
 
 #include <fmt/format.h>
 
-// https://baldursgate3.wiki.fextralife.com/Armour+Class
 class Armor: public Item
 {
 public:
@@ -74,6 +73,12 @@ public:
 
   LightArmor(const LightArmor& armor): WearArmor(armor) {}
 
+  /**
+   * @brief Get the Wear Armor Class object
+   * 
+   * @param dexterity_modifier 
+   * @return int 
+   */
   int GetWearArmorClass(int dexterity_modifier) const override
   {
     return ac_ + dexterity_modifier;
@@ -87,6 +92,12 @@ public:
 
   MediumArmor(const MediumArmor& armor): WearArmor(armor) {}
 
+  /**
+   * @brief Get the Wear Armor Class object
+   * 
+   * @param dexterity_modifier 
+   * @return int 
+   */
   int GetWearArmorClass(int dexterity_modifier) const override
   {
     int ac_modifier = dexterity_modifier > 2 ? 2 : dexterity_modifier;
@@ -100,7 +111,13 @@ public:
   HeavyArmor(const std::string& name, int ac): WearArmor(name, ac) {}
 
   HeavyArmor(const HeavyArmor& armor): WearArmor(armor) {}
-
+  
+  /**
+   * @brief Get the Wear Armor Class object
+   * 
+   * @param dexterity_modifier 
+   * @return int 
+   */
   int GetWearArmorClass(int dexterity_modifier) const override
   {
     return ac_;

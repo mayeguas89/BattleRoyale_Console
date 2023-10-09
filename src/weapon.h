@@ -112,17 +112,6 @@ inline std::string DamageTypeToString(Weapon::DamageType damage_type)
   return "UNDEFINED";
 }
 
-inline std::ostream& operator<<(std::ostream& os, const Weapon& w)
-{
-  // return os << fmt::format("Weapon: {}, Shield: {}, WearArmor: {}", *c.weapon_, *c.shield_, *c.wear_armor_);
-  // return os << fmt::format("{{Name: {}, Damage: {}d{}, DamageType: {}}}",
-  //                          w.GetName(),
-  //                          w.GetNumDices(),
-  //                          w.GetFaces(),
-  //                          DamageTypeToString(w.GetDamageType()));
-  // return os << "Name: " << w.GetName() << " damage: " <<
-}
-
 template<>
 struct fmt::formatter<Weapon>: fmt::formatter<std::string>
 {

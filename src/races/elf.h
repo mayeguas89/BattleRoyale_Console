@@ -1,4 +1,5 @@
 #pragma once
+#include "ability.h"
 #include "race.h"
 
 class Elf: public Race
@@ -6,7 +7,7 @@ class Elf: public Race
 public:
   enum class Type
   {
-    HighElf=0,
+    HighElf = 0,
     WoodElf,
     None
   };
@@ -24,7 +25,7 @@ public:
   };
   Elf(Abilities& abilities): Race(abilities)
   {
-    abilities.map[AbilityType::Dexterity] += 2;
+    abilities.AddToAbility(AbilityType::Dexterity, 2);
   }
 };
 
@@ -47,7 +48,7 @@ class HighElf: public Elf
 public:
   HighElf(Abilities& abilities): Elf(abilities)
   {
-    abilities.map[AbilityType::Intelligence] += 1;
+    abilities.AddToAbility(AbilityType::Intelligence, 1);
   }
 };
 
@@ -56,6 +57,6 @@ class WoodElf: public Elf
 public:
   WoodElf(Abilities& abilities): Elf(abilities)
   {
-    abilities.map[AbilityType::Wisdom] += 1;
+    abilities.AddToAbility(AbilityType::Wisdom, 1);
   }
 };

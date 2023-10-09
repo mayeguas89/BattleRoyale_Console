@@ -4,17 +4,17 @@
 class Druid: public Class
 {
 public:
-  Druid(Abilities& abilities): Class(abilities, 8, 0)
+  Druid(Abilities& abilities): Class(abilities, 8, 5)
   {
     primary_hability_.push_back(AbilityType::Wisdom);
     saving_throw.push_back(AbilityType::Intelligence);
     saving_throw.push_back(AbilityType::Wisdom);
-    abilities.map[AbilityType::Strength] += 10;
-    abilities.map[AbilityType::Dexterity] += 14;
-    abilities.map[AbilityType::Constitution] += 13;
-    abilities.map[AbilityType::Intelligence] += 8;
-    abilities.map[AbilityType::Wisdom] += 15;
-    abilities.map[AbilityType::Charisma] += 12;
+    abilities.AddToAbility(AbilityType::Strength, 10);
+    abilities.AddToAbility(AbilityType::Dexterity, 14);
+    abilities.AddToAbility(AbilityType::Constitution, 13);
+    abilities.AddToAbility(AbilityType::Intelligence, 8);
+    abilities.AddToAbility(AbilityType::Wisdom, 15);
+    abilities.AddToAbility(AbilityType::Charisma, 12);
   }
   AbilityType GetSpellCastingAbility() override
   {

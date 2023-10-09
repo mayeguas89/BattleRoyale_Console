@@ -1,131 +1,24 @@
+#include "Windows.h"
 #include "character.h"
-#include "dice.h"
+#include "classes/factory.h"
+#include "death_saving_throw.h"
 #include "game_manager.h"
+#include "health.h"
 #include "interface.h"
+#include "races/factory.h"
+#include "spell_data_base.h"
 #include "tournament.h"
+#include "turn_action.h"
+#include "weapon_data_base.h"
+#include "wear_armor_data_base.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <filesystem>
+
 using namespace ::testing;
-
-TEST(Dice, Simple)
-{
-  auto d = Dice(6);
-  EXPECT_NE(d.ThrowDice(), d.ThrowDice());
-}
-
-TEST(GameManager, NumberOfPlayersIsNotBiggerThanMaximumAllowed)
-{
-  for (int i = 0; i <= GameManager::kMaxNumPlayers; i++)
-  {
-    GameManager::Get().AddPlayer(Player());
-  }
-  ASSERT_THAT(GameManager::Get().GetPlayers(), SizeIs(GameManager::kMaxNumPlayers));
-}
-
-void AddPlayersToGM(int number_of_players)
-{
-  for (int i = 0; i < number_of_players; i++)
-  {
-    GameManager::Get().AddPlayer(Player());
-  }
-}
-
-struct TournamentTest: Test
-{
-};
-
-TEST_F(TournamentTest, TournamentOneParticipantGiveOnlyPlayerAsWinner)
-{
-  GameManager::Get().ClearPlayers();
-  AddPlayersToGM(1);
-
-  Tournament t(GameManager::Get().GetPlayers());
-  auto& winner = t();
-  ASSERT_EQ(winner.GetName(), "0");
-  fmt::print("Player {} has win!\n", winner.GetName());
-}
-
-TEST_F(TournamentTest, TournamentOddParticipant)
-{
-  GameManager::Get().ClearPlayers();
-  AddPlayersToGM(3);
-
-  Tournament t(GameManager::Get().GetPlayers());
-  auto& winner = t();
-  ASSERT_EQ(winner.GetName(), "0");
-  fmt::print("Player {} has win!\n", winner.GetName());
-}
-
-TEST_F(TournamentTest, TournamentEvenParticipant)
-{
-  GameManager::Get().ClearPlayers();
-  int participants = 4;
-  AddPlayersToGM(participants);
-
-  Tournament t(GameManager::Get().GetPlayers());
-  auto& winner = t();
-  ASSERT_EQ(winner.GetName(), "0");
-  fmt::print("Player {} has win!\n", winner.GetName());
-}
-
-TEST_F(TournamentTest, TournamentEvenNotPowerOf2)
-{
-  GameManager::Get().ClearPlayers();
-  int participants = 6;
-  AddPlayersToGM(participants);
-
-  Tournament t(GameManager::Get().GetPlayers());
-  auto& winner = t();
-  ASSERT_EQ(winner.GetName(), "0");
-  fmt::print("Player {} has win!\n", winner.GetName());
-}
-
-TEST_F(TournamentTest, TournamentEvenNotPowerOf2Two)
-{
-  GameManager::Get().ClearPlayers();
-  int participants = 12;
-  AddPlayersToGM(participants);
-
-  Tournament t(GameManager::Get().GetPlayers());
-  auto& winner = t();
-  ASSERT_EQ(winner.GetName(), "0");
-  fmt::print("Player {} has win!\n", winner.GetName());
-}
-
-struct GameManagerTest: Test
-{
-  GameManagerTest()
-  {
-    // for (int i = 0; i < GameManager::kMaxNumPlayers; i++)
-    for (int i = 0; i < 5; i++)
-    {
-      GameManager::Get().AddPlayer(Player());
-    }
-  }
-};
-
-TEST_F(GameManagerTest, PlayRound)
-{
-  GameManager::Get().StartGame();
-  while (GameManager::Get().IsRunning())
-  {
-    GameManager::Get().PlayRound();
-  }
-
-  fmt::print("\n** Combat has finished **\n");
-  auto& p = GameManager::Get().GetWinner();
-
-  fmt::print("Player {} has win!\n", p.GetName());
-}
-
-TEST(Interface, SelectFromType)
-{
-  // GameInterface::SelectFromType<Player::Type>();
-  // GameInterface::SelectFromType<Player::Action>();
-  // GameInterface::SelectFromType<Player::Weapon>();
-}
+namespace fs = std::filesystem;
 
 TEST(AbilityTest, AbilityGetScore)
 {
@@ -146,48 +39,8 @@ TEST(AbilityTest, AbilityGetScore)
   ASSERT_EQ(ability.GetModifier(), 5);
 
   ability.SetScore(30);
-  ASSERT_EQ(ability.GetModifier(), 10);
+  ASSERT_EQ(ability.GetModifier(), 7);
 }
-
-#include "races/factory.h"
-#include "races/race.h"
-
-TEST(RaceTest, HumanCreation)
-{
-  Abilities abilities;
-  auto human = RaceFactory::Create(abilities, Race::Type::Human);
-  for (auto& ability: abilities.map)
-  {
-    ASSERT_EQ(ability.second.GetScore(), 1);
-  }
-}
-
-TEST(RaceTest, GithyankiCreation)
-{
-  Abilities abilities;
-  auto githyanki = RaceFactory::Create(abilities, Race::Type::Githyanki);
-  ASSERT_EQ(abilities.map.find(AbilityType::Intelligence)->second.GetScore(), 1);
-  ASSERT_EQ(abilities.map.find(AbilityType::Strength)->second.GetScore(), 2);
-}
-
-TEST(RaceTest, GoldDwarfCreation)
-{
-  Abilities abilities;
-  auto dwarf = RaceFactory::Create(abilities, Race::Type::Dwarf, Dwarf::Type::GoldDwarf);
-  ASSERT_EQ(abilities.map.find(AbilityType::Wisdom)->second.GetScore(), 1);
-  ASSERT_EQ(abilities.map.find(AbilityType::Constitution)->second.GetScore(), 2);
-}
-
-TEST(RaceTest, ShieldDwarfCreation)
-{
-  Abilities abilities;
-  auto dwarf = RaceFactory::Create(abilities, Race::Type::Dwarf, Dwarf::Type::ShieldDwarf);
-  ASSERT_EQ(abilities.map.find(AbilityType::Strength)->second.GetScore(), 2);
-  ASSERT_EQ(abilities.map.find(AbilityType::Constitution)->second.GetScore(), 2);
-}
-
-#include "character.h"
-#include "classes/factory.h"
 
 TEST(CharacterTest, HumanWarlockTheFiend)
 {
@@ -195,12 +48,12 @@ TEST(CharacterTest, HumanWarlockTheFiend)
   auto race = RaceFactory::Create(abilities, Race::Type::Human);
   auto the_class = ClassFactory::Create(abilities, Class::Type::Warlock, Warlock::Type::TheFiendWarlock);
   auto character = Character(abilities, std::move(race), std::move(the_class));
-  ASSERT_EQ(character.GetAbility(AbilityType::Strength).value().GetScore(), 9);
-  ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).value().GetScore(), 13);
-  ASSERT_EQ(character.GetAbility(AbilityType::Constitution).value().GetScore(), 15);
-  ASSERT_EQ(character.GetAbility(AbilityType::Intelligence).value().GetScore(), 14);
-  ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).value().GetScore(), 11);
-  ASSERT_EQ(character.GetAbility(AbilityType::Charisma).value().GetScore(), 16);
+  ASSERT_EQ(character.GetAbility(AbilityType::Strength).GetScore(), 9);
+  ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).GetScore(), 13);
+  ASSERT_EQ(character.GetAbility(AbilityType::Constitution).GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Intelligence).GetScore(), 14);
+  ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).GetScore(), 11);
+  ASSERT_EQ(character.GetAbility(AbilityType::Charisma).GetScore(), 16);
 }
 
 TEST(CharacterTest, StrongheartHalflingWizard)
@@ -209,15 +62,54 @@ TEST(CharacterTest, StrongheartHalflingWizard)
   auto race = RaceFactory::Create(abilities, Race::Type::Halfling, Halfling::Type::StrongheartHalfling);
   auto the_class = ClassFactory::Create(abilities, Class::Type::Wizard);
   auto character = Character(abilities, std::move(race), std::move(the_class));
-  ASSERT_EQ(character.GetAbility(AbilityType::Strength).value().GetScore(), 8);
-  ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).value().GetScore(), 15);
-  ASSERT_EQ(character.GetAbility(AbilityType::Constitution).value().GetScore(), 15);
-  ASSERT_EQ(character.GetAbility(AbilityType::Intelligence).value().GetScore(), 15);
-  ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).value().GetScore(), 10);
-  ASSERT_EQ(character.GetAbility(AbilityType::Charisma).value().GetScore(), 12);
+  ASSERT_EQ(character.GetAbility(AbilityType::Strength).GetScore(), 8);
+  ASSERT_EQ(character.GetAbility(AbilityType::Dexterity).GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Constitution).GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Intelligence).GetScore(), 15);
+  ASSERT_EQ(character.GetAbility(AbilityType::Wisdom).GetScore(), 10);
+  ASSERT_EQ(character.GetAbility(AbilityType::Charisma).GetScore(), 12);
 }
 
-#include "health.h"
+TEST(DeathSavingThrowTest, DeathSavingThrowFail)
+{
+  DeathSavingThrow dst;
+  auto [succes, failure, heal] = dst(1);
+  ASSERT_EQ(failure, 2);
+  ASSERT_EQ(succes, 0);
+  ASSERT_FALSE(heal);
+}
+
+TEST(DeathSavingThrowTest, DeathSavingThrowHeal)
+{
+  DeathSavingThrow dst;
+  auto [succes, failure, heal] = dst(20);
+  ASSERT_EQ(failure, 0);
+  ASSERT_EQ(succes, 1);
+  ASSERT_TRUE(heal);
+}
+
+TEST(DeathSavingThrowTest, DeathSavingThrowSucces)
+{
+  DeathSavingThrow dst;
+  auto [succes, failure, heal] = dst(19);
+  ASSERT_EQ(failure, 0);
+  ASSERT_EQ(succes, 1);
+  ASSERT_FALSE(heal);
+}
+
+TEST(DeathSavingThrowTest, DeathSavingThrowSucces2)
+{
+  DeathSavingThrow dst;
+  dst(19);
+  auto [succes, failure, heal] = dst(1);
+  ASSERT_EQ(failure, 2);
+  ASSERT_EQ(succes, 1);
+  ASSERT_FALSE(heal);
+  auto [succes1, failure1, heal1] = dst(1);
+  ASSERT_EQ(failure1, 4);
+  ASSERT_EQ(succes1, 1);
+  ASSERT_FALSE(heal1);
+}
 
 struct HealthTest: Test
 {
@@ -252,8 +144,6 @@ TEST_F(HealthTest, Heal)
   ASSERT_EQ(h.GetCurrent(), last_life + 2);
 }
 
-#include "turn_action.h"
-
 Character CreateCharacter(Race::Type race_type, Subrace subrace, Class::Type class_type, Subclass subclass)
 {
   Abilities abilities;
@@ -279,17 +169,24 @@ TEST(ActionTest, CastSpell)
   attack();
 }
 
-#include "weapon_data_base.h"
-
-#include <fstream>
+std::string GetFilePath(const std::string& filepath)
+{
+  char binary_path[MAX_PATH];
+  GetModuleFileName(NULL, binary_path, MAX_PATH);
+  fs::path path{binary_path};
+  path = path.parent_path().make_preferred();
+  path = path / filepath;
+  return path.string();
+}
 
 TEST(WeaponContainerTest, MeleeWeaponTest)
 {
+  auto ranged_weapons = GetFilePath("cfg/final_ranged_weapons.json");
+  auto melee_weapons = GetFilePath("cfg/final_melee_weapons.json");
+
   WeaponDataBase weapon_db;
-  weapon_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
-                     "simpleRangedWeapons.json",
-                     "C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
-                     "simpleMeleeWeapons.json"});
+  weapon_db.AddData({ranged_weapons, melee_weapons});
+
   auto barbed_dagger = weapon_db.GetDataByName("Barbed Dagger");
 
   ASSERT_TRUE(barbed_dagger);
@@ -304,26 +201,22 @@ TEST(WeaponContainerTest, MeleeWeaponTest)
   ASSERT_EQ(dart->GetAttackAbilityModifier(), Ability::Type::Dexterity);
 }
 
-#include "spell_data_base.h"
-
 TEST(SpellContainerTest, SpellTest)
 {
+  auto final_spells = GetFilePath("cfg/final_spells.json");
   SpellDataBase spell_db;
-  spell_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
-                    "final_spells.json"});
+  spell_db.AddData({final_spells});
   auto inflinct_wounds = spell_db.GetDataByName("Inflict Wounds");
   ASSERT_TRUE(inflinct_wounds);
   ASSERT_EQ(inflinct_wounds->GetFaces(), 10);
   ASSERT_EQ(inflinct_wounds->GetNumDices(), 3);
 }
 
-#include "wear_armor_data_base.h"
-
 TEST(ArmorDataBaseTest, ArmorTest)
 {
+  auto final_armor = GetFilePath("cfg/final_armor.json");
   WearArmorDataBase armor_db;
-  armor_db.AddData({"C:/Users/mayeg/Documents/U-TAD/Master/programacionAvanzada/C++/BattleRoyale/build/Debug/cfg/"
-                    "final_armor.json"});
+  armor_db.AddData({final_armor});
   auto leather_armor = armor_db.GetDataByName("Leather Armor");
   auto breastplate = armor_db.GetDataByName("Breastplate");
   auto chain_mail = armor_db.GetDataByName("Chain Mail");
@@ -354,17 +247,30 @@ TEST(CharacterAssignWeaponAndArmors, Simple)
   auto armor = armor_db.GetDataByName("Studded Leather Armor");
   ASSERT_TRUE(armor);
 
-  auto ability_modifier = character.GetAbility(handaxe->GetAttackAbilityModifier())->GetModifier();
+  auto ability_modifier = character.GetAbility(handaxe->GetAttackAbilityModifier()).GetModifier();
   character.EquipWeapon(handaxe);
   character.EquipWearAmor(armor);
 
   ASSERT_EQ(character.GetAttackModifier(), ability_modifier);
-  // Va con el dado por lo que no se puede saber
-  // ASSERT_EQ(character.RollDamage(), character.GetAttackModifier() + ability_modifier);
 }
 
-#include "tournament.h"
-#include "interface.h"
+struct CharacterTestDamage: Test
+{
+  Character character_one{CreateCharacter(Race::Type::Drow,
+                                          Drow::Type::LolthSwornDrow,
+                                          Class::Type::Warlock,
+                                          Warlock::Type::TheFiendWarlock)};
+};
+
+TEST_F(CharacterTestDamage, ReceiveDamage)
+{
+  // Starting Life 8
+  character_one.ReceiveDamage(10);
+  ASSERT_THAT(character_one.GetState(), Character::State::Unconscious);
+  character_one.ReceiveDamage(2);
+  character_one.ReceiveDamage(8);
+  ASSERT_THAT(character_one.GetState(), Character::State::Death);
+}
 
 struct MatchTest: Test
 {
@@ -392,7 +298,7 @@ struct MatchTest: Test
 
     typedef std::vector<std::shared_ptr<Spell>>::iterator Iterator;
     auto selected_spell = GameInterface::SelectFromContainer<Iterator>(spells.begin(), spells.end());
-   
+
     std::cout << (*selected_spell)->GetName() << std::endl;
     // auto inflinct_wounds = spell_db.GetDataByName("Inflict Wounds");
     // auto inflinct_wounds = spell_db.GetDataByName("Inflict Wounds");

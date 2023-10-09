@@ -55,19 +55,24 @@ public:
   Spell(const Spell& other) = default;
   Spell() = default;
 
-  AbilityType GetAbilityTypeSavingThrows() const
+  virtual AbilityType GetAbilityTypeSavingThrows() const
   {
     return saving_throw_;
   }
 
-  int GetLevel() const
+  virtual int GetLevel() const
   {
     return level_;
   }
 
-  const std::vector<DamageInflict>& GetDamageInflict() const
+  virtual const std::vector<DamageInflict>& GetDamageInflict() const
   {
     return damage_inflict_;
+  }
+
+  virtual EffectType GetEffectType() const
+  {
+    return effect_type_;
   }
 
 protected:

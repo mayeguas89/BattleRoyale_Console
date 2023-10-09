@@ -1,4 +1,5 @@
 #pragma once
+#include "ability.h"
 #include "race.h"
 
 class HalfElf: public Race
@@ -6,7 +7,7 @@ class HalfElf: public Race
 public:
   enum class Type
   {
-    HighHalfElf=0,
+    HighHalfElf = 0,
     WoodHalfElf,
     None
   };
@@ -24,11 +25,10 @@ public:
   };
   HalfElf(Abilities& abilities): Race(abilities)
   {
-    abilities.map[AbilityType::Charisma] += 2;
-    // TODO: Add +2 points in other habilities
+    abilities.AddToAbility(AbilityType::Charisma, 2);
+    abilities.AddToAbility(AbilityType::Strength, 2);
   }
 };
-
 
 inline std::string TypeToString(const HalfElf::Type& type)
 {
@@ -43,7 +43,6 @@ inline std::string TypeToString(const HalfElf::Type& type)
       return "INVALID";
   }
 }
-
 
 class HighHalfElf: public HalfElf
 {

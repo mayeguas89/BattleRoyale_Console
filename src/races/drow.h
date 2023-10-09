@@ -1,6 +1,7 @@
 #pragma once
 #include "race.h"
 
+#include "ability.h"
 class Drow: public Race
 {
 public:
@@ -24,8 +25,8 @@ public:
   };
   Drow(Abilities& abilities): Race(abilities)
   {
-    abilities.map[AbilityType::Charisma] += 1;
-    abilities.map[AbilityType::Dexterity] += 1;
+    abilities.AddToAbility(AbilityType::Charisma, 1);
+    abilities.AddToAbility(AbilityType::Dexterity, 1);
   }
 };
 

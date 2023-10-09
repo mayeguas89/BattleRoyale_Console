@@ -1,4 +1,5 @@
 #pragma once
+#include "ability.h"
 #include "race.h"
 
 class Dwarf: public Race
@@ -6,7 +7,7 @@ class Dwarf: public Race
 public:
   enum class Type
   {
-    GoldDwarf=0,
+    GoldDwarf = 0,
     ShieldDwarf,
     None
   };
@@ -26,7 +27,7 @@ public:
 
   Dwarf(Abilities& abilities): Race(abilities)
   {
-    abilities.map[AbilityType::Constitution] += 2;
+    abilities.AddToAbility(AbilityType::Constitution, 2);
   }
 };
 
@@ -49,7 +50,7 @@ class GoldDwarf: public Dwarf
 public:
   GoldDwarf(Abilities& abilities): Dwarf(abilities)
   {
-    abilities.map[AbilityType::Wisdom] += 1;
+    abilities.AddToAbility(AbilityType::Wisdom, 1);
   }
 };
 
@@ -58,6 +59,6 @@ class ShieldDwarf: public Dwarf
 public:
   ShieldDwarf(Abilities& abilities): Dwarf(abilities)
   {
-    abilities.map[AbilityType::Strength] += 2;
+    abilities.AddToAbility(AbilityType::Strength, 2);
   }
 };

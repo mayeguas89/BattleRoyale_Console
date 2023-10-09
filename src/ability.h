@@ -8,6 +8,7 @@
 class Ability
 {
 public:
+  static const int kMaxAbility = 24;
   enum class Type
   {
     Strength = 0,
@@ -40,6 +41,7 @@ public:
 
   void SetScore(int value)
   {
+    value = std::min(value, kMaxAbility);
     score_ = value;
     CalculateModifier();
   }
@@ -61,19 +63,48 @@ inline void operator+=(Ability& ability, int value)
   ability.CalculateModifier();
 }
 
-struct Abilities
+class Abilities
 {
-  Abilities():
-    map{std::unordered_map<Ability::Type, Ability>{{Ability::Type::Strength, Ability()},
-                                                   {Ability::Type::Charisma, Ability()},
-                                                   {Ability::Type::Constitution, Ability()},
-                                                   {Ability::Type::Dexterity, Ability()},
-                                                   {Ability::Type::Intelligence, Ability()},
-                                                   {Ability::Type::Wisdom, Ability()}}}
-  {}
-  std::unordered_map<Ability::Type, Ability> map;
+public:
+  Abilities();
+
+  std::unordered_map<Ability::Type, Ability> GetMap()
+  {
+    return map_;
+  }
+
+  tabulate::Table GetAbilitiesTable()
+  {
+    return abilities_table_;
+  }
+
+  void SetAbility(Ability::Type type, Ability ability)
+  {
+    map_[type] = ability;
+
+    SetAbilitiesTable();
+  }
+
+  void AddToAbility(Ability::Type type, int value)
+  {
+    map_[type] += value;
+
+    SetAbilitiesTable();
+  }
+
+  Ability GetAbility(Ability::Type type) const
+  {
+    return map_.find(type)->second;
+  }
+
+  void SetAbilitiesTable();
 
   friend std::ostream& operator<<(std::ostream& os, const Abilities& abilities);
+
+private:
+  std::unordered_map<Ability::Type, Ability> map_;
+
+  tabulate::Table abilities_table_;
 };
 
 inline std::string AbilityTypeToString(Ability::Type type)
@@ -115,13 +146,5 @@ inline Ability::Type StringToAbilityType(const std::string& type)
 
 inline std::ostream& operator<<(std::ostream& os, const Abilities& abilities)
 {
-  tabulate::Table abilities_table;
-  abilities_table.add_row({"Name", "Value", "Modifier"});
-  for (auto it = abilities.map.begin(); it != abilities.map.end(); it++)
-  {
-    abilities_table.add_row({AbilityTypeToString(it->first),
-                             fmt::format("{}", it->second.GetScore()),
-                             fmt::format("{}", it->second.GetModifier())});
-  }
-  return os << abilities_table;
+  return os << abilities.abilities_table_;
 }

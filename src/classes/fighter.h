@@ -3,16 +3,16 @@
 class Fighter: public Class
 {
 public:
-  Fighter(Abilities& abilities): Class(abilities, 10, 0)
+  Fighter(Abilities& abilities): Class(abilities, 10, 6)
   {
     primary_hability_.push_back(AbilityType::Strength);
     saving_throw.push_back(AbilityType::Constitution);
     saving_throw.push_back(AbilityType::Strength);
-    abilities.map[AbilityType::Strength] += 15;
-    abilities.map[AbilityType::Dexterity] += 13;
-    abilities.map[AbilityType::Constitution] += 14;
-    abilities.map[AbilityType::Intelligence] += 10;
-    abilities.map[AbilityType::Wisdom] += 12;
-    abilities.map[AbilityType::Charisma] += 8;
+    abilities.AddToAbility(AbilityType::Strength, 15);
+    abilities.AddToAbility(AbilityType::Dexterity, 13);
+    abilities.AddToAbility(AbilityType::Constitution, 14);
+    abilities.AddToAbility(AbilityType::Intelligence, 10);
+    abilities.AddToAbility(AbilityType::Wisdom, 12);
+    abilities.AddToAbility(AbilityType::Charisma, 8);
   }
 };

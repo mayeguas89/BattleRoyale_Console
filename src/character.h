@@ -29,6 +29,7 @@ public:
     Stable,
     None
   };
+
   virtual ~Character() = default;
   Character(Abilities abilities, std::unique_ptr<Race> race, std::unique_ptr<Class> p_class):
     abilities_{abilities},
@@ -63,6 +64,9 @@ public:
     state_ = other.state_;
 
     spells_ = other.spells_;
+    spell_slots_ = other.spell_slots_;
+    level_ = other.level_;
+    status_effect_ = other.status_effect_;
     // cantrips_ = other.cantrips_;
   }
 
@@ -88,34 +92,35 @@ public:
     state_ = other.state_;
 
     spells_ = other.spells_;
+    spell_slots_ = other.spell_slots_;
+    level_ = other.level_;
+    status_effect_ = other.status_effect_;
     // cantrips_ = other.cantrips_;
     return *this;
   }
 
-  std::optional<Ability> GetAbility(Ability::Type type);
+  Ability GetAbility(Ability::Type type) const;
 
-  int GetDifficultyClass()
+  int GetDifficultyClass() const
   {
     auto ability = class_->GetSpellCastingAbility();
     return 8 + GetAbilityModifier(ability);
   }
 
-  int GetArmorClass()
+  int GetArmorClass() const
   {
     auto dexterity_modifier = GetAbilityModifier(Ability::Type::Dexterity);
 
     return helpers::GetArmorClass(dexterity_modifier, wear_armor_, shield_);
   }
 
-  // Logica: Si el AC es menor que el que da la armadura actual no se equipa
   void EquipWearAmor(std::shared_ptr<WearArmor> wear_armor);
 
-  // Logica: Si el AC es menor que el que da la armadura actual no se equipa
   void EquipShield(std::shared_ptr<Shield> shield);
 
   void EquipWeapon(std::shared_ptr<Weapon> weapon);
 
-  int GetAttackModifier()
+  int GetAttackModifier() const
   {
     if (!weapon_)
       return 0;
@@ -124,18 +129,6 @@ public:
 
   int RollDamage()
   {
-    // When attacking with a weapon, you add your ability modifier
-    // A spell tells you which dice to roll for damage and whether to add any modifier
-
-    // Se pueden añadir diferentes tipos de daños segun arma/hechizo usado
-
-    // If a creature or an object has resistance to a damage
-    // type, damage o f that type is halved against it. If a
-    // creature or an object has vulnerability to a damage
-    // type, damage o f that type is doubled against it.
-
-    // magical methods such as a cure wounds spell or
-    // a potion of healing can remove damage in an instant.return 0;
     auto damage = GetAttackModifier();
     if (weapon_)
       damage += weapon_->GetDamage();
@@ -143,13 +136,8 @@ public:
     return damage;
   }
 
-  // Massive damage can kill you instantly. When damage
-  // reduces you to 0 hit points and there is damage
-  // remaining, you die if the remaining damage equals
-  // or exceeds your hit point maximum.
   void ReceiveDamage(int damage);
 
-  // Se puede tener más vida que el hit_die?
   void Heal(int amount)
   {
     health_.Heal(amount);
@@ -176,11 +164,14 @@ public:
       spells_.push_back(spell);
   }
 
-  void LevelUp()
+  void Restore()
   {
-    spell_slots_++;
-    level_++;
+    health_.Restore();
   }
+
+  void PrintAbilities();
+
+  void LevelUp();
 
   int GetNumberOfSpellsSlots()
   {
@@ -213,13 +204,42 @@ public:
     return state_ != State::Death;
   }
 
+  bool IsUnconscious()
+  {
+    return state_ == State::Unconscious;
+  }
+
+  Spell* GetHealingSpell()
+  {
+    auto it = std::find_if(spells_.begin(),
+                           spells_.end(),
+                           [](auto spell) { return spell->GetEffectType() == Spell::EffectType::Healing; });
+    if (it != spells_.end())
+      return it->get();
+    return nullptr;
+  }
+
   Spell* GetSpell()
   {
+    if (IsUnconscious())
+    {
+      return GetHealingSpell();
+    }
     auto index = SingletonDice::Get().Roll(spell_slots_) - 1;
     return spells_.at(index).get();
   }
 
-  void PrintStats();
+  State GetState()
+  {
+    return state_;
+  }
+
+  void SetStatsTable(tabulate::Table& stats_table);
+
+  tabulate::Table GetAbilitiesTable()
+  {
+    return abilities_.GetAbilitiesTable();
+  }
 
   friend std::ostream& operator<<(std::ostream& os, const Character& c);
 
@@ -246,11 +266,9 @@ protected:
   // std::vector<Cantrip> cantrips_;
 
 private:
-  int GetAbilityModifier(Ability::Type type)
+  int GetAbilityModifier(Ability::Type type) const
   {
-    if (auto ability = GetAbility(type); ability.has_value())
-      return ability->GetModifier();
-    return 0;
+    return GetAbility(type).GetModifier();
   }
 };
 

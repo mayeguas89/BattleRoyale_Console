@@ -1,18 +1,16 @@
 #include "character.h"
 
+#include "game_manager.h"
 #include "turn_action.h"
 
 #include <tabulate/table.hpp>
 
+#include <algorithm>
 #include <iostream>
 
-std::optional<Ability> Character::GetAbility(Ability::Type type)
+Ability Character::GetAbility(Ability::Type type) const
 {
-  if (auto it = abilities_.map.find(type); it != abilities_.map.end())
-  {
-    return it->second;
-  }
-  return std::nullopt;
+  return abilities_.GetAbility(type);
 }
 
 void Character::EquipShield(std::shared_ptr<Shield> shield)
@@ -23,8 +21,8 @@ void Character::EquipShield(std::shared_ptr<Shield> shield)
     return;
   }
   int previous_ac =
-    helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity)->GetModifier(), wear_armor_, shield_);
-  int new_ac = helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity)->GetModifier(), wear_armor_, shield);
+    helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity).GetModifier(), wear_armor_, shield_);
+  int new_ac = helpers::GetArmorClass(GetAbility(Ability::Type::Dexterity).GetModifier(), wear_armor_, shield);
   if (new_ac > previous_ac)
     shield_ = shield;
 }
@@ -42,7 +40,7 @@ void Character::EquipWeapon(std::shared_ptr<Weapon> weapon)
 
 void Character::ReceiveDamage(int damage)
 {
-  fmt::print("\n** ReceiveDamage={} **\n", damage);
+  // fmt::print("\n** ReceiveDamage={} **\n", damage);
 
   int remaning_damage = health_.TakeDamage(damage);
 
@@ -50,13 +48,12 @@ void Character::ReceiveDamage(int damage)
 
   if (current_life == 0)
   {
-    if (remaning_damage == health_.GetHitPoints())
+    if (remaning_damage >= health_.GetHitPoints())
     {
       state_ = State::Death;
     }
     else
     {
-      // This unconsciousness ends if you regain any hit points
       if (state_ == State::Unconscious)
         death_saving_throw_.AddFailure();
       else
@@ -71,24 +68,22 @@ TurnActionType Character::DoAction()
   {
     auto [succes, failure, heal] = death_saving_throw_();
 
-    tabulate::Table dst_table;
-    dst_table.add_row({"Succes", "Failure", "Heal"});
-    dst_table.add_row({fmt::format("{}", succes), fmt::format("{}", failure), fmt::format("{}", heal)});
-    dst_table[1][0].format().font_background_color(tabulate::Color::blue).font_style({tabulate::FontStyle::bold});
-    dst_table[1][1].format().font_background_color(tabulate::Color::red).font_style({tabulate::FontStyle::bold});
-    dst_table[1][2].format().font_background_color(tabulate::Color::green).font_style({tabulate::FontStyle::bold});
-    std::cout << dst_table << std::endl;
-
-    if (heal)
-      health_.Heal(1);
-    if (succes >= 3)
+    if (heal || succes >= 3)
     {
+      health_.Heal(1);
       state_ = State::Stable;
       death_saving_throw_.Restart();
     }
-    else if (failure == 3)
+
+    if (failure >= 3)
     {
       state_ = State::Death;
+    }
+
+    if (CanThrowSpels())
+    {
+      if (GetHealingSpell())
+        TurnActionType::CastASpell;
     }
 
     return TurnActionType::None;
@@ -101,26 +96,59 @@ TurnActionType Character::DoAction()
   {
     return TurnActionType::CastASpell;
   }
+
   return TurnActionType::Attack;
 }
 
-void Character::PrintStats()
+void Character::LevelUp()
 {
-  tabulate::Table stats_table;
-  stats_table.add_row({"Current Health", "State"});
-  stats_table.add_row({fmt::format("{}", health_.GetCurrent()), StateToString(state_)});
-  if (health_.GetCurrent() > health_.GetHitPoints() / 2)
+  level_++;
+
+  fmt::print("\n ** Leveling up ** \n");
+  auto amount = class_->GetHitPointsPerLevel() + GetAbilityModifier(AbilityType::Constitution);
+
+  fmt::print("\n ** Incrementa {} hit points a los hit points actuales ** \n", amount);
+
+  health_.AddHitPoints(amount);
+
+  for (const auto& ability: class_->GetPrimaryHabilities())
   {
-    stats_table[1][0]
-      .format()
-      .font_background_color(tabulate::Color::green)
-      .font_style({tabulate::FontStyle::bold});
+    fmt::print("\n ** Incrementa la habilidad {} ** \n", AbilityTypeToString(ability));
+    abilities_.AddToAbility(ability, 1);
   }
-  else
+
+  if (CanThrowSpels())
   {
+    spell_slots_++;
+    auto spells_db = GameManager::Get().GetSpellDB();
+    auto spells = spells_db.GetSpellsByLevel(level_);
+    auto spell = spells.at(SingletonDice::Get().Roll(static_cast<int>(spells.size())) - 1);
+
+    fmt::print("\n ** Ahora puede usar el hechizo {} ** \n", spell->GetName());
+
+    spells_.push_back(spell);
+  }
+}
+
+void Character::PrintAbilities()
+{
+  tabulate::Table sub_table;
+  sub_table.add_row({"Abilities"});
+  sub_table.add_row({abilities_.GetAbilitiesTable()});
+  std::cout << sub_table << std::endl;
+}
+
+void Character::SetStatsTable(tabulate::Table& stats_table)
+{
+  stats_table[1][0].set_text({fmt::format("{}", health_.GetCurrent())});
+  stats_table[1][0].format().font_background_color(tabulate::Color::green).font_style({tabulate::FontStyle::bold});
+  if (health_.GetCurrent() < health_.GetHitPoints() / 2)
     stats_table[1][0].format().font_background_color(tabulate::Color::red).font_style({tabulate::FontStyle::bold});
-  }
-  std::cout << "\n" << stats_table << "\n";
+
+  stats_table[1][1].set_text({StateToString(state_)});
+  stats_table[1][1].format().font_background_color(tabulate::Color::green).font_style({tabulate::FontStyle::bold});
+  if (state_ == State::Death)
+    stats_table[1][1].format().font_background_color(tabulate::Color::red).font_style({tabulate::FontStyle::bold});
 }
 
 void Character::EquipWearAmor(std::shared_ptr<WearArmor> wear_armor)

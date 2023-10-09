@@ -38,19 +38,29 @@ public:
     return AbilityType::None;
   }
 
-  int GetHitDice()
+  virtual int GetHitDice()
   {
     return hit_dice_;
   }
 
-  int GetInstancesCounter()
+  virtual int GetInstancesCounter()
   {
     return instances_counter_;
   }
 
-  bool HasSavingThrowModifier(AbilityType ability_type)
+  virtual bool HasSavingThrowModifier(AbilityType ability_type)
   {
     return std::find(saving_throw.begin(), saving_throw.end(), ability_type) != saving_throw.end();
+  }
+
+  virtual int GetHitPointsPerLevel()
+  {
+    return hit_die_per_level_;
+  }
+
+  virtual std::vector<AbilityType> GetPrimaryHabilities() const 
+  {
+    return primary_hability_;
   }
 
 protected:

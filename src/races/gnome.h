@@ -1,4 +1,5 @@
 #pragma once
+#include "ability.h"
 #include "race.h"
 
 class Gnome: public Race
@@ -6,7 +7,7 @@ class Gnome: public Race
 public:
   enum class Type
   {
-    DeepGnome=0,
+    DeepGnome = 0,
     ForestGnome,
     RockGnome,
     None
@@ -25,7 +26,7 @@ public:
   };
   Gnome(Abilities& abilities): Race(abilities)
   {
-    abilities.map[AbilityType::Intelligence] += 1;
+    abilities.AddToAbility(AbilityType::Intelligence, 1);
   }
 };
 
@@ -50,7 +51,7 @@ class DeepGnome: public Gnome
 public:
   DeepGnome(Abilities& abilities): Gnome(abilities)
   {
-    abilities.map[AbilityType::Dexterity] += 1;
+    abilities.AddToAbility(AbilityType::Dexterity, 1);
   }
 };
 
@@ -59,7 +60,7 @@ class ForestGnome: public Gnome
 public:
   ForestGnome(Abilities& abilities): Gnome(abilities)
   {
-    abilities.map[AbilityType::Dexterity] += 1;
+    abilities.AddToAbility(AbilityType::Dexterity, 1);
   }
 };
 
@@ -68,6 +69,6 @@ class RockGnome: public Gnome
 public:
   RockGnome(Abilities& abilities): Gnome(abilities)
   {
-    abilities.map[AbilityType::Constitution] += 1;
+    abilities.AddToAbility(AbilityType::Constitution, 1);
   }
 };
